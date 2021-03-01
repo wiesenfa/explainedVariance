@@ -18,5 +18,4 @@ proportionOf <- function(object){
       sum(object$Rxz)
   ), 
   class = "varExpProp")
-  
 }
