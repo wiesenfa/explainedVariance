@@ -28,7 +28,7 @@ varianceExplained.lmerMod <- varianceExplained.lmerModLmerTest <- function(objec
     Z <- lapply(Z, function(x) scale( x, center = TRUE, scale = FALSE))
     
     # check whether correltated random intercept and random slope for same grouping variable
-      correlatedREs <- lapply(object@cnms, function(x) length(x)>1)
+      correlatedREs <- sapply(object@cnms, function(x) length(x)>1)
       if (any (correlatedREs)) stop("Correlated random effects currently not supported. 
                                     Use two vertical bars (||) to specify multiple uncorrelated random effects for the same grouping variable, 
                                     e.g. (x||group)
