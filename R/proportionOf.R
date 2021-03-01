@@ -1,3 +1,7 @@
+#' Derive proportion of variance explained by variance components
+#' 
+#' @param object \code{varExp} object created by \code{\link[varianceExplainedPack:varianceExplained]{varianceExplainedPack::varianceExplained()}}.
+#' @export
 proportionOf <- function(object){
   structure(list(
     Rx = object$Rx / object$var.y,
