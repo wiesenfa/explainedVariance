@@ -1,4 +1,6 @@
-#' @export
+#' Derive variance decomposition
+#' 
+#' #' @export
 varianceExplained <- function(object,...) UseMethod("varianceExplained")
 
 #' @export
@@ -77,7 +79,8 @@ varianceExplained.lmerMod <- varianceExplained.lmerModLmerTest <- function(objec
 
 
 
-varianceExplained.mmer <- function(object, X, Z, y){   # Z is a list, y optional
+#' @export
+varianceExplained.mmer <- function(object, X, Z){   # Z is a list, y optional
   # center matrices
     X <- scale(X, center = TRUE, scale = FALSE)
     Z <- lapply(Z, function(x) scale( x, center = TRUE, scale = FALSE))
@@ -104,7 +107,10 @@ varianceExplained.mmer <- function(object, X, Z, y){   # Z is a list, y optional
                  u.tilde = u.tilde,
                  var.u =var.u, h1 = h1
   )
-  if (!missing(y)) deco= c(var.x = var(y), deco)
+  deco= c(var.y = var(model.response(model.frame(object$call$fixed,
+                                                  data = object$dataOriginal)
+                                     )), 
+          deco)
   class(deco) <- "varExp"
   return(deco)
 }
