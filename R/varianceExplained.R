@@ -87,7 +87,7 @@ varianceExplained.lmerMod <- varianceExplained.lmerModLmerTest <- function(objec
 
 
 #' @param X Design matrix for fixed effects
-#' @param Z List of desgin matrices for random effects (one list element for each effect)
+#' @param Z named List of desgin matrices for random effects (one list element for each effect).
 #' @importFrom stats model.frame model.response
 #' @export
 #' @rdname varianceExplained
