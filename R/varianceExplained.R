@@ -65,8 +65,9 @@ varianceExplained.lmerMod <- varianceExplained.lmerModLmerTest <- function(objec
   h1 <- compute_h1(Xc = X, Z = Z, su, se2)
 
   # variance-covariance matrix for  BLUPs
-    var.u <- lapply(1:length(su),
-                    function(i) su[i]^2 * t(Z[[i]]) %*% h1 %*% Z[[i]] / se2
+    var.u <- sapply(names(su),
+                    function(id) su[id]^2 * t(Z[[id]]) %*% h1 %*% Z[[id]] / se2,
+                    simplify = FALSE
                     )
 
   # decomposition works with centered matrices!

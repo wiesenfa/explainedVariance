@@ -18,6 +18,7 @@ var.part <- function(b, Sx, Sb){
 
 compute_h1 = function(Xc, Z,
                       su, se2){
+  Z <- Z[names(su)]
   q.vec= sapply(Z, ncol)
   Zc <- do.call(cbind, Z)
   n = nrow(Zc)
@@ -57,17 +58,18 @@ decomp <- function(X, Z,
 
 
   # Explained variation by random effects
-     Rz.1 <- sapply(1:length(su),
-                         function(i) su[i] * matrix_trace( crossprod(Z[[i]]) )  / (n - 1)
-                         )
+    Rz.1 <- sapply(names(su),
+                   function(id) unname(su[id]) * matrix_trace( crossprod(Z[[id]]) )  / (n - 1)
+                   )
+    
+    Rz.2 <- sapply(names(su),
+                   function(id)  {
+                     sum(  (Z[[id]] %*% u.tilde[[id]]) ^ 2 ) / (n - 1) -
+                       matrix_trace( var.u[[id]] %*% crossprod(Z[[id]]))  / (n - 1)
+                   })
 
-    Rz.2 <- sapply(1:length(su),
-                        function(i)  {
-                           sum(  (Z[[i]] %*% u.tilde[[i]]) ^ 2 ) / (n - 1) -
-                           matrix_trace( var.u[[i]] %*% crossprod(Z[[i]]))  / (n - 1)
-                          })
-    names(Rz.2) <- names(su)
-
+    
+    
     # all pairwise
       if (length(su)>1){
         combis <- combn(names(su), 2)
@@ -89,11 +91,9 @@ decomp <- function(X, Z,
       }
 
   # Explained variation by correlation of fixed and random effects DGP
-    Rxz <- sapply(1:length(su),
-                       function(i)  2 *  t(b.hat) %*% t(X) %*% Z[[i]] %*% u.tilde[[i]] / (n - 1)
-                       )
-    names(Rxz) <- names(su)
-
+    Rxz <- sapply(names(su),
+                  function(id)  2 *  t(b.hat) %*% t(X) %*% Z[[id]] %*% u.tilde[[id]] / (n - 1)
+    )
 
 
   return( list(se2=se2,
