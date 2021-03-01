@@ -65,9 +65,10 @@ varianceExplained.lmerMod <- varianceExplained.lmerModLmerTest <- function(objec
                    b.hat = b.hat, S.b.hat = S.b.hat,  u.tilde = u.tilde,
                    var.u =var.u, h1 = h1
                    )
-
-  return(c(var.y = var(object@frame[,1]),
-           deco))
+  deco <- c(var.y = var(object@frame[,1]),
+            deco)
+  class(deco) <- "varExp"
+  return(deco)
 }
 
 
@@ -103,6 +104,7 @@ varianceExplained.mmer <- function(object, X, Z, y){   # Z is a list, y optional
                  u.tilde = u.tilde,
                  var.u =var.u, h1 = h1
   )
- if (!missing(y)) deco= c(var.x = var(y), deco)
+  if (!missing(y)) deco= c(var.x = var(y), deco)
+  class(deco) <- "varExp"
   return(deco)
 }
