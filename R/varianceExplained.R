@@ -1,14 +1,22 @@
 #' Derive variance decomposition
 #' 
-#' #' @export
+#' @param object a \code{lmerMod} or \code{lmerModLmerTest} object created by \code{\link[lme4:lmer]{lme4::lmer()}} or \code{\link[lmerTest:lmer]{lmerTest::lmer()}}, respectively, or a \code{mmer} object created by  \code{\link[sommer:mmer]{sommer::mmer()}}.
+#' @param ... Currently no additional arguments
+#' @return a varExp object
+#' @export
+#' @rdname varianceExplained
 varianceExplained <- function(object,...) UseMethod("varianceExplained")
 
-#' @export
+#' @rdname varianceExplained
 varianceExplained.default <- function(object, ...) stop("not implemented for this class")
 
 
+#' @importFrom lme4 lFormula ranef fixef VarCorr
+#' @importFrom Matrix t
+#' @importFrom stats sigma var vcov
 #' @export
-varianceExplained.lmerMod <- varianceExplained.lmerModLmerTest <- function(object){
+#' @rdname varianceExplained
+varianceExplained.lmerMod <- varianceExplained.lmerModLmerTest <- function(object, ...){
 
   # get matrices
     mc=object@call
@@ -44,7 +52,7 @@ varianceExplained.lmerMod <- varianceExplained.lmerModLmerTest <- function(objec
 
   # get variance components
     se2 <-sigma(object)^2
-    su<-unlist(lapply(VarCorr(lmm.class), function(x) attr(x, "stddev")^2),
+    su<-unlist(lapply(VarCorr(object), function(x) attr(x, "stddev")^2),
                    recursive = F)
 
   # get estimates
@@ -67,9 +75,9 @@ varianceExplained.lmerMod <- varianceExplained.lmerModLmerTest <- function(objec
                    b.hat = b.hat, S.b.hat = S.b.hat,  u.tilde = u.tilde,
                    var.u =var.u, h1 = h1
                    )
-  deco <- c(var.y = var(object@frame[,1]),
-            deco)
-  class(deco) <- "varExp"
+  deco <- structure(c(var.y = var(object@frame[,1]),
+                      deco), 
+                    class = "varExp")
   return(deco)
 }
 
@@ -78,9 +86,12 @@ varianceExplained.lmerMod <- varianceExplained.lmerModLmerTest <- function(objec
 
 
 
-
+#' @param X Design matrix for fixed effects
+#' @param Z List of desgin matrices for random effects (one list element for each effect)
+#' @importFrom stats model.frame model.response
 #' @export
-varianceExplained.mmer <- function(object, X, Z){   # Z is a list, y optional
+#' @rdname varianceExplained
+varianceExplained.mmer <- function(object, X, Z, ...){   
   # center matrices
     X <- scale(X, center = TRUE, scale = FALSE)
     Z <- lapply(Z, function(x) scale( x, center = TRUE, scale = FALSE))
@@ -107,10 +118,10 @@ varianceExplained.mmer <- function(object, X, Z){   # Z is a list, y optional
                  u.tilde = u.tilde,
                  var.u =var.u, h1 = h1
   )
-  deco= c(var.y = var(model.response(model.frame(object$call$fixed,
-                                                  data = object$dataOriginal)
-                                     )), 
-          deco)
-  class(deco) <- "varExp"
+  deco= structure(c(var.y = var(model.response(model.frame(object$call$fixed,
+                                                           data = object$dataOriginal)
+                                               )), 
+                    deco), 
+                  class = "varExp")
   return(deco)
 }

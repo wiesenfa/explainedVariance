@@ -34,7 +34,7 @@ compute_h1 = function(Xc, Z,
 matrix_trace <- function(x) sum(diag(x))
 
 
-
+#' @importFrom utils combn
 decomp <- function(X, Z,
                    se2, su,
                    b.hat, S.b.hat,
