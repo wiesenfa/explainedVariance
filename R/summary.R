@@ -3,9 +3,9 @@
 #' @param object \code{varExp} object created by \code{\link[varianceExplainedPack:varianceExplained]{varianceExplainedPack::varianceExplained()}}.or \code{varExpProp} object created by \code{\link[varianceExplainedPack:proportionOf]{varianceExplainedPack::proportionOf()}}
 #' @export
 #' @rdname summaries
-summary.varExp <-function(x,...)  summary(x, ...)
+summary.varExp <-function(object,...)  summary(object, ...)
 
 
 #' @export
 #' @rdname summaries
-summary.varExpProp <-function(x,...)  summary(x, ...)
+summary.varExpProp <-function(object,...)  summary(object, ...)

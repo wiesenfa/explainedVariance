@@ -5,9 +5,9 @@
 \alias{summary.varExpProp}
 \title{Summary for (proportion of) variance explained by variance components}
 \usage{
-\method{summary}{varExp}(x, ...)
+\method{summary}{varExp}(object, ...)
 
-\method{summary}{varExpProp}(x, ...)
+\method{summary}{varExpProp}(object, ...)
 }
 \arguments{
 \item{object}{\code{varExp} object created by \code{\link[varianceExplainedPack:varianceExplained]{varianceExplainedPack::varianceExplained()}}.or \code{varExpProp} object created by \code{\link[varianceExplainedPack:proportionOf]{varianceExplainedPack::proportionOf()}}}
