@@ -107,8 +107,15 @@ varianceExplained.lmerMod <- varianceExplained.lmerModLmerTest <- function(objec
                    b.hat = b.hat, S.b.hat = S.b.hat,  u.tilde = u.tilde,
                    var.u =var.u, h1 = h1
                    )
-  deco <- structure(c(var.y = var(object@frame[,1]),
-                      deco), 
+  var.y <- var(object@frame[,1])
+  deco <- structure(c(var.y = var.y,
+                      deco,
+                      error = var.y- deco$se2 - 
+                        deco$Rx - 
+                        sum(deco$Rz.1 + deco$Rz.2) -  
+                        2 * sum(deco$Rz.pairs) - 
+                        sum(deco$Rxz)
+  ), 
                     class = "varExp")
   return(deco)
 }
@@ -150,10 +157,17 @@ varianceExplained.mmer <- function(object, X, Z, ...){
                  u.tilde = u.tilde,
                  var.u =var.u, h1 = h1
   )
-  deco= structure(c(var.y = var(model.response(model.frame(object$call$fixed,
-                                                           data = object$dataOriginal)
-                                               )), 
-                    deco), 
-                  class = "varExp")
+  var.y <- var(model.response(model.frame(object$call$fixed,
+                                          data = object$dataOriginal)
+                              ))
+  deco= structure(c(var.y = var.y, 
+                    deco,
+                    error = var.y - deco$se2 - 
+                      deco$Rx - 
+                      sum(deco$Rz.1 + deco$Rz.2) -  
+                      2 * sum(deco$Rz.pairs) - 
+                      sum(deco$Rxz)
+  ), 
+  class = "varExp")
   return(deco)
 }
