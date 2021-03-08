@@ -7,6 +7,8 @@ var.part <- function(b, Sx, Sb){
   ##############################################################################
   n <- length(b)
   rxb <- matrix(NA, n, n)
+  Sb = as.matrix(Sb) # assures that correct dimensions if only single covariate
+  Sx = as.matrix(Sx)
   for(i in 1 : n){
     for(j in 1 : n){
       rxb[i, j] <- (b[i] * b[j] - Sb[i, j] ) * Sx[i, j]
