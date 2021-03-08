@@ -76,17 +76,18 @@ decomp <- function(X, Z,
       if (length(su)>1){
         combis <- combn(names(su), 2)
 
-        Rz.pairs <- sapply(1:ncol(combis),
-                                function(i)  {
-                                  id1 <- combis[1,i]
-                                  id2 <- combis[2,i]
-
-                                  var.u12 <- su[id1] * su[id2] * t(Z[[id1]]) %*% h1 %*% Z[[id2]] / se2
-                                  Rz12 <-  t(u.tilde[[id1]]) %*% t(Z[[id1]]) %*% Z[[id2]] %*% u.tilde[[id2]] / (n - 1) -
-                                    matrix_trace( Z[[id1]] %*% var.u12 %*% t(Z[[id2]]) )   / (n - 1)
-                                  names(Rz12) <- paste(id1, id2, sep=" .vs. ")
-                                  return(Rz12)
-                                }  )
+        Rz.pairs <- matrix(NA, 
+                           nrow = length(su),
+                           ncol = length(su),
+                           dimnames = list(names(su), names(su)))
+        for (i in 1:ncol(combis)){
+          id1 <- combis[1,i]
+          id2 <- combis[2,i]
+          
+          var.u12 <- su[id1] * su[id2] * t(Z[[id1]]) %*% h1 %*% Z[[id2]] / se2
+          Rz.pairs[id1, id2] <- Rz.pairs[id2, id1] <- t(u.tilde[[id1]]) %*% t(Z[[id1]]) %*% Z[[id2]] %*% u.tilde[[id2]] / (n - 1) -
+            matrix_trace( Z[[id1]] %*% var.u12 %*% t(Z[[id2]]) )   / (n - 1)
+        }
       } else {
         Rz.pairs = NULL
       }
