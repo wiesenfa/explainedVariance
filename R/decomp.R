@@ -84,10 +84,9 @@ decomp <- function(X, Z,
                                   var.u12 <- su[id1] * su[id2] * t(Z[[id1]]) %*% h1 %*% Z[[id2]] / se2
                                   Rz12 <-  t(u.tilde[[id1]]) %*% t(Z[[id1]]) %*% Z[[id2]] %*% u.tilde[[id2]] / (n - 1) -
                                     matrix_trace( Z[[id1]] %*% var.u12 %*% t(Z[[id2]]) )   / (n - 1)
+                                  names(Rz12) <- paste(id1, id2, sep=" .vs. ")
                                   return(Rz12)
                                 }  )
-        names(Rz.pairs) <- apply(combis, 2, paste, collapse=" vs ")
-
       } else {
         Rz.pairs = NULL
       }
