@@ -1,3 +1,5 @@
+#' Print 
+#' 
 #' @param x \code{VarExp} object created by \code{\link[varianceExplainedPack:varianceExplained]{varianceExplainedPack::varianceExplained()}}.or \code{varExpProp} object created by \code{\link[varianceExplainedPack:proportionOf]{varianceExplainedPack::proportionOf()}}
 #' @export
 #' @rdname print.varExp
@@ -10,6 +12,7 @@ print.VarExpProp <-function(x,...)   cat("Proportion of variance explained objec
 
 
 
+#' Print  summary
 #' @param x object created by summary()
 #' @export
 #' @rdname print.summary.varExp

@@ -3,9 +3,9 @@
 #' @param object \code{varExp} object created by \code{\link[varianceExplainedPack:varianceExplained]{varianceExplainedPack::varianceExplained()}}.or \code{varExpProp} object created by \code{\link[varianceExplainedPack:proportionOf]{varianceExplainedPack::proportionOf()}}
 #' @export
 #' @rdname summaries
-summary.VarExp <-function(object,...){
+summary.VarExp <-function(object,digits=1,...){
   fixed <- c(X=object$Rx, X=object$Rxz,Sum=object$Rx+sum(object$Rxz))
-  fixedPartial <- colSums(object$Rxpart)
+  fixedPartial <- rowSums(object$Rxpart)
   
   random <- cbind("weighted ICC"= object$Rz.1,"data-specific deviation"=object$Rz.2, "sum" = object$Rz.1+object$Rz.2,
                   "correlation with fixed"= object$Rxz,
@@ -14,7 +14,7 @@ summary.VarExp <-function(object,...){
   unexplained <- object$se2
   total <- object$var.y
   error <- object$error
-  return(structure(c(fixed = fixed,
+  return(structure(list(fixed = fixed,
                      fixedPartial = fixedPartial,
                      random = random,
                      unexplained = unexplained,
