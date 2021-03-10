@@ -113,10 +113,10 @@ varianceExplained.lmerMod <- varianceExplained.lmerModLmerTest <- function(objec
                       error = var.y- deco$se2 - 
                         deco$Rx - 
                         sum(deco$Rz.1 + deco$Rz.2) -  
-                        2 * sum(deco$Rz.pairs) - 
+                        sum(deco$Rz.pairs, na.rm = TRUE) - 
                         sum(deco$Rxz)
   ), 
-                    class = "varExp")
+                    class = "VarExp")
   return(deco)
 }
 
@@ -165,9 +165,9 @@ varianceExplained.mmer <- function(object, X, Z, ...){
                     error = var.y - deco$se2 - 
                       deco$Rx - 
                       sum(deco$Rz.1 + deco$Rz.2) -  
-                      2 * sum(deco$Rz.pairs) - 
+                      sum(deco$Rz.pairs, na.rm = TRUE) - 
                       sum(deco$Rxz)
   ), 
-  class = "varExp")
+  class = "VarExp")
   return(deco)
 }
