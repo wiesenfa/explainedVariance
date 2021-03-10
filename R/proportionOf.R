@@ -5,7 +5,7 @@
 proportionOf <- function(object){
   structure(list(
     Rx = object$Rx / object$var.y,
-    Rxpart = rowSums(object$Rxpart) / object$var.y,
+    Rxpart = object$Rxpart / object$var.y,
     Rz.1 = object$Rz.1 / object$var.y,
     Rz.2 = object$Rz.2 / object$var.y,
     Rz.pairs = object$Rz.pairs / object$var.y,
