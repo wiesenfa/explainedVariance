@@ -11,11 +11,8 @@ proportionOf <- function(object){
     Rz.pairs = object$Rz.pairs / object$var.y,
     Rxz = object$Rxz / object$var.y,
     se2 = object$se2 / object$var.y,
-    error = object$var.y- object$se2 - 
-      object$Rx - 
-      sum(object$Rz.1) - sum(object$Rz.2) -  
-      2 * sum(object$Rz.pairs) - 
-      sum(object$Rxz)
+    error = object$error / object$var.y,
+    var.y = object$var.y
   ), 
-  class = "varExpProp")
+  class = "VarExpProp")
 }
