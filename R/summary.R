@@ -3,7 +3,7 @@
 #' @param object \code{varExp} object created by \code{\link[varianceExplainedPack:varianceExplained]{varianceExplainedPack::varianceExplained()}}.or \code{varExpProp} object created by \code{\link[varianceExplainedPack:proportionOf]{varianceExplainedPack::proportionOf()}}
 #' @export
 #' @rdname summaries
-summary.varExp <-function(object,...){
+summary.VarExp <-function(object,...){
   fixed <- c(X=object$Rx, X=object$Rxz,Sum=object$Rx+sum(object$Rxz))
   fixedPartial <- colSums(object$Rxpart)
   
@@ -21,7 +21,7 @@ summary.varExp <-function(object,...){
                      total = total,
                      error = error
   ), 
-  class = "summary.varExp"))
+  class = "summary.VarExp"))
 }
 
 
@@ -30,8 +30,8 @@ summary.varExp <-function(object,...){
 
 #' @export
 #' @rdname summaries
-summary.varExpProp <-function(object,...)  {
-  return(structure(summary.varExp(object, ...), 
-                   class = "summary.varExpProp"))
+summary.VarExpProp <-function(object,...)  {
+  return(structure(summary.VarExp(object, ...), 
+                   class = "summary.VarExpProp"))
 }
   
