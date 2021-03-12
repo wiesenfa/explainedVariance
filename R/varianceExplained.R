@@ -19,12 +19,10 @@ varianceExplained.default <- function(object, ...) stop("not implemented for thi
 varianceExplained.lmerMod <- varianceExplained.lmerModLmerTest <- function(object, ...){
 
   # get matrices
-    mc=object@call
-    mc[[1]] <- quote(lme4::lFormula)
-    lmod <- eval(mc, parent.frame(1L))
-    X <-lmod$X[,-1]
+    lmod <- getME(object,"ALL") #eval(mc, parent.frame(1L)) ## use getME() instead!!
+    X <-lmod$X[,-1, drop = FALSE]
     X <- scale(X, center = TRUE, scale = FALSE)
-    Z <-lapply(lmod$reTrms$Ztlist,Matrix::t)
+    Z <-lapply(lmod$Ztlist,Matrix::t)
     Z <- lapply(Z, function(x) scale( x, center = TRUE, scale = FALSE))
     
     # check whether correltated random intercept and random slope for same grouping variable
@@ -90,7 +88,7 @@ varianceExplained.lmerMod <- varianceExplained.lmerModLmerTest <- function(objec
     u.tilde <- unlist(ranef(object,condVar = FALSE), recursive = F)
 
   # assign names to Z matrices
-    names(Z) <- names(su)  <- names(u.tilde)
+    names(su)  <- names(u.tilde)
     
 
   h1 <- compute_h1(Xc = X, Z = Z, su, se2)
