@@ -5,7 +5,7 @@
 \alias{summary.VarExpProp}
 \title{Summary for (proportion of) variance explained by variance components}
 \usage{
-\method{summary}{VarExp}(object, ...)
+\method{summary}{VarExp}(object, digits = 1, ...)
 
 \method{summary}{VarExpProp}(object, ...)
 }
