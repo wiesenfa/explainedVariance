@@ -11,7 +11,7 @@ varianceExplained <- function(object,...) UseMethod("varianceExplained")
 varianceExplained.default <- function(object, ...) stop("not implemented for this class")
 
 
-#' @importFrom lme4 lFormula ranef fixef VarCorr
+#' @importFrom lme4 lFormula ranef fixef VarCorr getME
 #' @importFrom Matrix t
 #' @importFrom stats sigma var vcov
 #' @export
