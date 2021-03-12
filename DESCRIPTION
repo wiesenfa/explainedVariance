@@ -14,7 +14,7 @@ Authors@R:
            comment = c(ORCID = "YOUR-ORCID-ID"))
 Description: What the package does (one paragraph).
 License: GPL (>= 3)
-Imports: lme4, Matrix
+Imports: lme4, Matrix, reshape2, tidyr, dplyr
 Suggests: sommer
 Encoding: UTF-8
 LazyData: true
