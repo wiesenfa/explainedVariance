@@ -9,8 +9,12 @@ matrixToVector <- function(x){
 
 varianceExplainedToVector <- function(x){
   vv <- varianceExplained(x)
-  vv$Rz.pairs= matrixToVector(vv$Rz.pairs)
+  vv$Rx.Sum = vv$Rx+sum(vv$Rxz)
   vv$RxpartRowSums = rowSums(vv$Rxpart)
+  vv$Rz.pairsRowSums <- rowSums(vv$Rz.pairs, na.rm = T)
+  vv$Rz.sum = vv$Rz.1+vv$Rz.2
+  vv$Rz.total =  vv$Rz.sum +vv$Rxz+vv$Rz.pairsRowSums
+  vv$Rz.pairs= matrixToVector(vv$Rz.pairs)
   vv$Rxpart= matrixToVector(vv$Rxpart)
   unlist(vv)
 }
@@ -52,7 +56,66 @@ vectorToVarExp <- function(x){
   
 }
 
-# b=bootMer(lmm.class,varianceExplainedToVector,nsim = 3)
-# bt=b$t[,-grep("Rxpart.",colnames(b$t), fixed=T)]
-# colnames(bt) <- gsub("RxpartRowSums","Rxpart",colnames(bt), fixed=F)
-# bt
+
+
+#' Derive bootstrap confidence intervals for variance decomposition
+#' 
+#' @param object a \code{lmerMod} or \code{lmerModLmerTest} object created by \code{\link[lme4:lmer]{lme4::lmer()}} or \code{\link[lmerTest:lmer]{lmerTest::lmer()}}, respectively, or a \code{mmer} object created by  \code{\link[sommer:mmer]{sommer::mmer()}}.
+#' @param ... arguments passed to  \code{\link[lme4:bootMer]{lme4::bootMer()}}, in particular \code{nsim} for the number of simulations, thy type of bootstrap and arguments for parallel computing
+#' @export
+#' @rdname bootstrap
+bootstrap <- function(object,...) UseMethod("bootstrap")
+
+#' @rdname bootstrap
+bootstrap.default <- function(object, ...) stop("not implemented for this class")
+
+
+#' @importFrom lme4 bootMer
+#' @importFrom stats quantile
+#' @export
+#' @rdname bootstrap
+bootstrap.lmerMod <- bootstrap.lmerModLmerTest <- function(object, ...){
+  bootobj = bootMer(object,
+                    varianceExplainedToVector,
+                    ...)
+  
+  bt=bootobj$t[,-grep("Rxpart.", colnames(bootobj$t), fixed=T)]
+  bt=apply(bt, 2, quantile, probs=c(.025,.975), na.rm=TRUE)
+  bt0=bootobj$t0[-grep("Rxpart.", names(bootobj$t0), fixed=T)]
+  bootobj=as.data.frame(t(rbind(bt0, bt)))
+  
+  fixed <- rbind(X = bootobj["Rx",],
+                 bootobj[grep("Rxz",rownames(bootobj)),],
+                 Sum = bootobj["Rx.Sum",])
+  fixedPartial <- bootobj[grep("RxpartRowSums", rownames(bootobj)),]
+  rownames(fixedPartial) <- gsub("RxpartRowSums.", "", rownames(fixedPartial), fixed=F)
+  
+  random <- rbind("weighted ICC: " = bootobj[grep("Rz.1", rownames(bootobj)),],
+                  "data-specific deviation: " = bootobj[grep("Rz.2", rownames(bootobj)),],
+                  "Sum: " = bootobj[grep("Rz.sum", rownames(bootobj)),],
+                  "correlation with fixed: " = bootobj[grep("Rxz", rownames(bootobj)),],
+                  "correlation with random: " = bootobj[grep("Rz.pairsRowSums", rownames(bootobj)),],
+                  "total sum: "= bootobj[grep("Rz.total", rownames(bootobj)),]
+  )
+  rownames(random) <- gsub(".Rz.1.","",rownames(random), fixed=F)
+  rownames(random) <- gsub(".Rz.2.","",rownames(random), fixed=F)
+  rownames(random) <- gsub(".Rxz.","",rownames(random), fixed=F)
+  rownames(random) <- gsub(".Rz.pairsRowSums.","",rownames(random), fixed=F)
+  rownames(random) <- gsub(".Rz.total.","",rownames(random), fixed=F)
+  rownames(random) <- gsub(".Rz.sum.","",rownames(random), fixed=F)
+  
+  unexplained <- bootobj[grep("se2",rownames(bootobj)),] 
+  total <- bootobj[grep("var.y",rownames(bootobj)),] 
+  error <- bootobj[grep("error",rownames(bootobj)),] 
+  
+  return(
+    structure(list(fixed = fixed,
+                   fixedPartial = fixedPartial,
+                   random = random,
+                   unexplained = unexplained,
+                   total = total,
+                   error = error
+                   ),
+    class = "summary.VarExp")
+  )
+}
