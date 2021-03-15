@@ -1,6 +1,7 @@
 #' Print 
 #' 
 #' @param x \code{VarExp} object created by \code{\link[varianceExplainedPack:varianceExplained]{varianceExplainedPack::varianceExplained()}}.or \code{varExpProp} object created by \code{\link[varianceExplainedPack:proportionOf]{varianceExplainedPack::proportionOf()}}
+#' @param ... arguments passed to print()
 #' @export
 #' @rdname print.varExp
 print.VarExp <-function(x,...)  cat("Variance decomposition object. Sum of variance components deviates from var(y) by ", x$error,".",sep = "")
@@ -14,24 +15,25 @@ print.VarExpProp <-function(x,...)   cat("Proportion of variance explained objec
 
 #' Print  summary
 #' @param x object created by summary()
+#' @param ... arguments passed to print()
 #' @export
 #' @rdname print.summary.varExp
-print.summary.VarExp <-function(x,...){
+print.summary.VarExp <-function(x, ...){
   cat("Fixed effects:\n")
   cat("   Total explained variance by fixed effects (and by correlations with random effects):\n")
-  print(x$fixed)
+  print(x$fixed, ...)
   cat("   Partial explained variances by fixed effects (excluding by correlations with random effects):\n")
-  print(x$fixedPartial)
+  print(x$fixedPartial, ...)
   
   cat("\nExplained variance by random effects:\n")
   print(x$random)
   
   cat("\nUnexplained variation (residual):\n")
-  print(x$unexplained)
+  print(x$unexplained, ...)
   cat("\nTotal variation:\n")
-  print(x$total)
+  print(x$total, ...)
   cat("\nMismatch:\n")
-  print(x$error)
+  print(x$error, ...)
 }
 
 
@@ -40,15 +42,15 @@ print.summary.VarExp <-function(x,...){
 print.summary.VarExpProp <-function(x,...){
   cat("Fixed effects:\n")
   cat("   Proportion of total explained variance by fixed effects (and by correlations with random effects):\n")
-  print(x$fixed)
+  print(x$fixed, ...)
   cat("   Proportion of partial explained variances by fixed effects (excluding by correlations with random effects):\n")
-  print(x$fixedPartial)
+  print(x$fixedPartial, ...)
   
   cat("\nProportion of explained variance by random effects:\n")
-  print(x$random)
+  print(x$random, ...)
   
   cat("\nProportion of unexplained variation (residual):\n")
-  print(x$unexplained)
+  print(x$unexplained, ...)
 }
 
 

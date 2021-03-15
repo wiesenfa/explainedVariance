@@ -11,6 +11,8 @@
 }
 \arguments{
 \item{x}{object created by summary()}
+
+\item{...}{arguments passed to print()}
 }
 \description{
 Print  summary

@@ -11,6 +11,8 @@
 }
 \arguments{
 \item{x}{\code{VarExp} object created by \code{\link[varianceExplainedPack:varianceExplained]{varianceExplainedPack::varianceExplained()}}.or \code{varExpProp} object created by \code{\link[varianceExplainedPack:proportionOf]{varianceExplainedPack::proportionOf()}}}
+
+\item{...}{arguments passed to print()}
 }
 \description{
 Print
