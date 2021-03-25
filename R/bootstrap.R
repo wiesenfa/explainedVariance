@@ -83,39 +83,9 @@ bootstrap.lmerMod <- bootstrap.lmerModLmerTest <- function(object, ...){
   bt=apply(bt, 2, quantile, probs=c(.025,.975), na.rm=TRUE)
   bt0=bootobj$t0[-grep("Rxpart.", names(bootobj$t0), fixed=T)]
   bootobj=as.data.frame(t(rbind(bt0, bt)))
-  
-  fixed <- rbind(X = bootobj["Rx",],
-                 bootobj[grep("Rxz",rownames(bootobj)),],
-                 Sum = bootobj["Rx.Sum",])
-  fixedPartial <- bootobj[grep("RxpartRowSums", rownames(bootobj)),]
-  rownames(fixedPartial) <- gsub("RxpartRowSums.", "", rownames(fixedPartial), fixed=F)
-  
-  random <- rbind("weighted ICC: " = bootobj[grep("Rz.1", rownames(bootobj)),],
-                  "data-specific deviation: " = bootobj[grep("Rz.2", rownames(bootobj)),],
-                  "Sum: " = bootobj[grep("Rz.sum", rownames(bootobj)),],
-                  "correlation with fixed: " = bootobj[grep("Rxz", rownames(bootobj)),],
-                  "correlation with random: " = bootobj[grep("Rz.pairsRowSums", rownames(bootobj)),],
-                  "total sum: "= bootobj[grep("Rz.total", rownames(bootobj)),]
-  )
-  rownames(random) <- gsub(".Rz.1.","",rownames(random), fixed=F)
-  rownames(random) <- gsub(".Rz.2.","",rownames(random), fixed=F)
-  rownames(random) <- gsub(".Rxz.","",rownames(random), fixed=F)
-  rownames(random) <- gsub(".Rz.pairsRowSums.","",rownames(random), fixed=F)
-  rownames(random) <- gsub(".Rz.total.","",rownames(random), fixed=F)
-  rownames(random) <- gsub(".Rz.sum.","",rownames(random), fixed=F)
-  
-  unexplained <- bootobj[grep("se2",rownames(bootobj)),] 
-  total <- bootobj[grep("var.y",rownames(bootobj)),] 
-  error <- bootobj[grep("error",rownames(bootobj)),] 
-  
-  return(
-    structure(list(fixed = fixed,
-                   fixedPartial = fixedPartial,
-                   random = random,
-                   unexplained = unexplained,
-                   total = total,
-                   error = error
-                   ),
-    class = "summary.VarExp")
-  )
+  structure(bootobj,
+            class = c("VarExp.boot", "data.frame" ))
 }
+
+
+ 
