@@ -2,12 +2,23 @@
 % Please edit documentation in R/proportionOf.R
 \name{proportionOf}
 \alias{proportionOf}
+\alias{proportionOf.default}
+\alias{proportionOf.VarExp}
+\alias{proportionOf.VarExp.boot}
 \title{Derive proportion of variance explained by variance components}
 \usage{
-proportionOf(object)
+proportionOf(object, ...)
+
+\method{proportionOf}{default}(object, ...)
+
+\method{proportionOf}{VarExp}(object, type = "dataset-specific")
+
+\method{proportionOf}{VarExp.boot}(object, type = "dataset-specific")
 }
 \arguments{
 \item{object}{\code{varExp} object created by \code{\link[varianceExplainedPack:varianceExplained]{varianceExplainedPack::varianceExplained()}}.}
+
+\item{type}{specify "dataset-specific" or "population" variation in denominator}
 }
 \description{
 Derive proportion of variance explained by variance components

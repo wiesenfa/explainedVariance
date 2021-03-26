@@ -3,16 +3,21 @@
 \name{summary.VarExp}
 \alias{summary.VarExp}
 \alias{summary.VarExpProp}
+\alias{summary.VarExp.boot}
 \title{Summary for (proportion of) variance explained by variance components}
 \usage{
 \method{summary}{VarExp}(object, ...)
 
 \method{summary}{VarExpProp}(object, ...)
+
+\method{summary}{VarExp.boot}(object, probs = c(0.025, 0.975), ...)
 }
 \arguments{
 \item{object}{\code{varExp} object created by \code{\link[varianceExplainedPack:varianceExplained]{varianceExplainedPack::varianceExplained()}}.or \code{varExpProp} object created by \code{\link[varianceExplainedPack:proportionOf]{varianceExplainedPack::proportionOf()}}}
 
 \item{...}{currently not supported}
+
+\item{probs}{quantiles}
 }
 \description{
 Summary for (proportion of) variance explained by variance components

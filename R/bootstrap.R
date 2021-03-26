@@ -78,13 +78,8 @@ bootstrap.lmerMod <- bootstrap.lmerModLmerTest <- function(object, ...){
   bootobj = bootMer(object,
                     varianceExplainedToVector,
                     ...)
-  
-  bt=bootobj$t[,-grep("Rxpart.", colnames(bootobj$t), fixed=T)]
-  bt=apply(bt, 2, quantile, probs=c(.025,.975), na.rm=TRUE)
-  bt0=bootobj$t0[-grep("Rxpart.", names(bootobj$t0), fixed=T)]
-  bootobj=as.data.frame(t(rbind(bt0, bt)))
   structure(bootobj,
-            class = c("VarExp.boot", "data.frame" ))
+            class = c("VarExp.boot", "bootMer", "boot"))
 }
 
 

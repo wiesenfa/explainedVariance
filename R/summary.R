@@ -62,8 +62,18 @@ summary.VarExpProp <-function(object,...)  {
 
 
 #' @export
+#' @param probs quantiles
 #' @rdname summaries
-summary.VarExp.boot <-function(object,...){
+summary.VarExp.boot <-function(object, 
+                               probs = c(.025,.975),
+                               ...){
+  bt=apply(object$t[,-grep("Rxpart.", colnames(object$t), fixed=T)], 
+           2, 
+           quantile, 
+           probs = probs, 
+           na.rm=TRUE)
+  bt0=object$t0[-grep("Rxpart.", names(object$t0), fixed=T)]
+  object = as.data.frame(t(rbind(bt0, bt)))
   
   Rxz = object[grep("Rxz",rownames(object)),]
   rownames(Rxz) =  gsub("Rxz.","",rownames(Rxz), fixed=F)
