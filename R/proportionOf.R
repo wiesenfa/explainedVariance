@@ -2,17 +2,28 @@
 #' 
 #' @param object \code{varExp} object created by \code{\link[varianceExplainedPack:varianceExplained]{varianceExplainedPack::varianceExplained()}}.
 #' @export
-proportionOf <- function(object){
-  structure(list(
-    Rx = object$Rx / object$var.y,
-    Rxpart = object$Rxpart / object$var.y,
-    Rz.1 = object$Rz.1 / object$var.y,
-    Rz.2 = object$Rz.2 / object$var.y,
-    Rz.pairs = object$Rz.pairs / object$var.y,
-    Rxz = object$Rxz / object$var.y,
-    se2 = object$se2 / object$var.y,
-    error = object$error / object$var.y,
-    var.y = object$var.y
-  ), 
-  class = "VarExpProp")
+proportionOf <- function(object, type = "dataset-specific"){
+  
+  if (type != "population") {
+    denom <- object$var.y
+    res <- list(
+      Rz.2 = object$Rz.2 / denom,
+      Rz.pairs = object$Rz.pairs / denom,
+      Rxz = object$Rxz / denom,
+      error = object$error / denom
+    )
+  }  else {
+    denom <- object$Rx + sum(object$Rz.1) + object$se2
+    res <- NULL
+  }
+  structure(c(res,
+               list(
+                 Rx = object$Rx / denom,
+                 Rxpart = object$Rxpart / denom,
+                 Rz.1 = object$Rz.1 / denom,
+                 se2 = object$se2 / denom,
+                 var.y = denom,
+                 type = type
+               )), 
+            class = "VarExpProp")
 }

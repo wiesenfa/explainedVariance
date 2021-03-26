@@ -32,6 +32,35 @@ summary.VarExp <-function(object,...){
 }
 
 
+
+#' @export
+#' @rdname summaries
+summary.VarExpProp <-function(object,...)  {
+  if (object$type != "population"){
+    return(structure(summary.VarExp(object, ...), 
+                     class = "summary.VarExpProp"))
+    
+  } else {
+    fixed <- c(X=object$Rx)
+    fixedPartial <- rowSums(object$Rxpart)
+    
+    random <- cbind("population"= object$Rz.1 )
+    if (nrow(random)>1) random <- rbind(random,
+                                        total = colSums(random, 
+                                                        na.rm = TRUE))
+    unexplained <- object$se2
+    total <- object$var.y
+    return(structure(list(fixed = fixed,
+                          fixedPartial = fixedPartial,
+                          random = random,
+                          unexplained = unexplained,
+                          total = total), 
+                     class = "summary.VarExpProp"))
+  }
+}
+
+
+
 #' @export
 #' @rdname summaries
 summary.VarExp.boot <-function(object,...){
@@ -76,12 +105,3 @@ return(
 
 
 
-
-
-#' @export
-#' @rdname summaries
-summary.VarExpProp <-function(object,...)  {
-  return(structure(summary.VarExp(object, ...), 
-                   class = "summary.VarExpProp"))
-}
-  
