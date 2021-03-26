@@ -114,4 +114,39 @@ return(
 }
 
 
+#' @export
+#' @rdname summaries
+summary.VarExpProp.boot <-function(object,...)  {
+  if (attr(object, "type") != "population"){
+    return(structure(summary.VarExp.boot(object, ...), 
+                     class = "summary.VarExpProp"))
+    
+  } else {
+    bt=apply(object$t[,-grep("Rxpart.", colnames(object$t), fixed=T)], 
+             2, 
+             quantile, 
+             probs = probs, 
+             na.rm=TRUE)
+    bt0=object$t0[-grep("Rxpart.", names(object$t0), fixed=T)]
+    object = as.data.frame(t(rbind(bt0, bt)))
+    
+    fixed <- rbind(X = object["Rx",])
+    fixedPartial <- object[grep("RxpartRowSums", rownames(object)),]
+    rownames(fixedPartial) <- gsub("RxpartRowSums.", "", rownames(fixedPartial), fixed=F)
+    
+    random <- rbind("population: " = object[grep("Rz.1", rownames(object)),])
+    rownames(random) <- gsub(".Rz.1.","",rownames(random), fixed=F)
+    # if (nrow(random)>1) random <- rbind(random,
+    #                                     total = colSums(random, 
+    #                                                     na.rm = TRUE))
+    unexplained <- object[grep("se2",rownames(object)),] 
+    total <- object[grep("var.y",rownames(object)),] 
+    return(structure(list(fixed = fixed,
+                          fixedPartial = fixedPartial,
+                          random = random,
+                          unexplained = unexplained,
+                          total = total), 
+                     class = "summary.VarExpProp"))
+  }
+}
 
