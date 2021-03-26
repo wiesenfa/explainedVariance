@@ -78,39 +78,39 @@ summary.VarExp.boot <-function(object,
   Rxz = object[grep("Rxz",rownames(object)),]
   rownames(Rxz) =  gsub("Rxz.","",rownames(Rxz), fixed=F)
   fixed <- rbind(X = object["Rx",],
-               "X"= Rxz,
-               Sum = object["Rx.Sum",])
-fixedPartial <- object[grep("RxpartRowSums", rownames(object)),]
-rownames(fixedPartial) <- gsub("RxpartRowSums.", "", rownames(fixedPartial), fixed=F)
-
-random <- rbind("population: " = object[grep("Rz.1", rownames(object)),],
-                "data-specific deviation: " = object[grep("Rz.2", rownames(object)),],
-                "data-specific: " = object[grep("Rz.sum", rownames(object)),],
-                "X." = object[grep("Rxz", rownames(object)),],
-                "explainedCovariance: " = object[grep("Rz.pairsRowSums", rownames(object)),],
-                "total: "= object[grep("Rz.total", rownames(object)),]
-)
-rownames(random) <- gsub(".Rz.1.","",rownames(random), fixed=F)
-rownames(random) <- gsub(".Rz.2.","",rownames(random), fixed=F)
-rownames(random) <- gsub(".Rxz.","",rownames(random), fixed=F)
-rownames(random) <- gsub(".Rz.pairsRowSums.","",rownames(random), fixed=F)
-rownames(random) <- gsub(".Rz.total.","",rownames(random), fixed=F)
-rownames(random) <- gsub(".Rz.sum.","",rownames(random), fixed=F)
-
-unexplained <- object[grep("se2",rownames(object)),] 
-total <- object[grep("var.y",rownames(object)),] 
-error <- object[grep("error",rownames(object)),] 
-
-return(
-  structure(list(fixed = fixed,
-                 fixedPartial = fixedPartial,
-                 random = random,
-                 unexplained = unexplained,
-                 total = total,
-                 error = error
-  ),
-  class = "summary.VarExp")
-)
+                 "X"= Rxz,
+                 Sum = object["Rx.Sum",])
+  fixedPartial <- object[grep("RxpartRowSums", rownames(object)),]
+  rownames(fixedPartial) <- gsub("RxpartRowSums.", "", rownames(fixedPartial), fixed=F)
+  
+  random <- rbind("population: " = object[grep("Rz.1", rownames(object)),],
+                  "data-specific deviation: " = object[grep("Rz.2", rownames(object)),],
+                  "data-specific: " = object[grep("Rz.sum", rownames(object)),],
+                  "X." = object[grep("Rxz", rownames(object)),],
+                  "explainedCovariance: " = object[grep("Rz.pairsRowSums", rownames(object)),],
+                  "total: "= object[grep("Rz.total", rownames(object)),]
+  )
+  rownames(random) <- gsub(".Rz.1.","",rownames(random), fixed=F)
+  rownames(random) <- gsub(".Rz.2.","",rownames(random), fixed=F)
+  rownames(random) <- gsub(".Rxz.","",rownames(random), fixed=F)
+  rownames(random) <- gsub(".Rz.pairsRowSums.","",rownames(random), fixed=F)
+  rownames(random) <- gsub(".Rz.total.","",rownames(random), fixed=F)
+  rownames(random) <- gsub(".Rz.sum.","",rownames(random), fixed=F)
+  
+  unexplained <- object[grep("se2",rownames(object)),] 
+  total <- object[grep("var.y",rownames(object)),] 
+  error <- object[grep("error",rownames(object)),] 
+  
+  return(
+    structure(list(fixed = fixed,
+                   fixedPartial = fixedPartial,
+                   random = random,
+                   unexplained = unexplained,
+                   total = total,
+                   error = error
+    ),
+    class = "summary.VarExp")
+  )
 }
 
 

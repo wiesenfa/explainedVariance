@@ -66,7 +66,8 @@ proportionOf.VarExp.boot <- function(object,
   attr(object, "type") <- type
   structure(
     object,
-    class = c("VarExpProp.boot", "bootMer", "boot" ) )
+    class = c("VarExpProp.boot", "bootMer", "boot" ) 
+    )
 }
 
 
