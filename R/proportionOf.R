@@ -7,12 +7,16 @@
 proportionOf <- function(object,...) UseMethod("proportionOf")
 
 #' @rdname proportionOf
+#' @export
 proportionOf.default <- function(object, ...) stop("not implemented for this class")
 
 
 
 #' @rdname proportionOf
-proportionOf.VarExp <- function(object, type = "dataset-specific"){
+#' @export
+proportionOf.VarExp <- function(object, 
+                                type = "dataset-specific",
+                                ...){
   
   if (type != "population") {
     denom <- object$var.y
@@ -40,7 +44,10 @@ proportionOf.VarExp <- function(object, type = "dataset-specific"){
 
 
 #' @rdname proportionOf
-proportionOf.VarExp.boot <- function(object, type = "dataset-specific"){
+#' @export
+proportionOf.VarExp.boot <- function(object, 
+                                     type = "dataset-specific",
+                                     ...){
   
   if (type != "population") {
     object$t0 <-   object$t0 / object$t0["var.y"]

@@ -7,8 +7,10 @@
 #' @rdname explainedCovariance
 explainedCovariance <- function(object,...) UseMethod("explainedCovariance")
 
+#' @export
 explainedCovariance.default <- function(object, ...) stop("not implemented for this class")
 
+#' @export
 #' @rdname explainedCovariance
 explainedCovariance.VarExp <- function(object, ...) {
   diag(object$Rz.pairs) <- object$Rz.1 + object$Rz.2

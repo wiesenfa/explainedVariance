@@ -66,6 +66,7 @@ vectorToVarExp <- function(x){
 #' @rdname bootstrap
 bootstrap <- function(object,...) UseMethod("bootstrap")
 
+#' @export
 #' @rdname bootstrap
 bootstrap.default <- function(object, ...) stop("not implemented for this class")
 
