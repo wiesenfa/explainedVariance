@@ -24,6 +24,7 @@ proportionOf.VarExp <- function(object,
       Rz.2 = object$Rz.2 / denom,
       Rz.pairs = object$Rz.pairs / denom,
       Rxz = object$Rxz / denom,
+      Rxz.part = object$Rxz.part / denom,
       error = object$error / denom
     )
   }  else {
