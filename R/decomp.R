@@ -66,11 +66,11 @@ decomp <- function(X, Z,
   n <- nrow(X)
 
   # Explained variation by fixed effects
-    Rxpart <- var.part(b = b.hat,
+    Rx.part <- var.part(b = b.hat,
                        Sx = crossprod(X) / (n - 1),
                        Sb = S.b.hat)
-    colnames(Rxpart) = rownames(Rxpart) = colnames(X)
-    Rx <- sum(Rxpart)
+    colnames(Rx.part) = rownames(Rx.part) = colnames(X)
+    Rx <- sum(Rx.part)
 
 
   # Explained variation by random effects
@@ -109,14 +109,14 @@ decomp <- function(X, Z,
   # Explained variation by correlation of fixed and random effects DGP
     Rxz <- sapply(names(su),
                   function(id)  2 *  t(b.hat) %*% t(X) %*% Z[[id]] %*% u.tilde[[id]] / (n - 1)
-    )
+                  )
     Rxz.part <- sapply(names(su),
-                      function(id) var.part_XZ(b=bh, u.tilde[[id]], Sxz= ( t(Xc) %*% Z[[id]] / (n - 1)   ) ) 
-    )
-    
+                      function(id) rowSums(var.part_XZ(b=b.hat, u.tilde[[id]], Sxz= ( t(X) %*% Z[[id]] / (n - 1)   ) )) 
+                      )
+    rownames(Rxz.part) <- colnames(X)
 
   return( list(se2=se2,
-               Rxpart = Rxpart, Rx = Rx,
+               Rx.part = Rx.part, Rx = Rx,
                Rz.1 = Rz.1, Rz.2 = Rz.2,
                Rz.pairs = Rz.pairs,
                Rxz = Rxz,
