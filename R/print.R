@@ -19,11 +19,16 @@ print.VarExpProp <-function(x,...)   cat("Proportion of variance explained objec
 #' @export
 #' @rdname print.summary.varExp
 print.summary.VarExp <-function(x, ...){
-  cat("Fixed effects:\n")
-  cat("   Total explained variation by fixed effects (and by correlations with random effects):\n")
-  print(x$fixed, ...)
-  cat("   Partial explained variation by fixed effects (excluding by correlations with random effects):\n")
-  print(x$fixedPartial, ...)
+  
+  
+  cat("Explained variation by fixed effects:\n")
+  print(x$fixed)
+  # cat("   Total explained variation by fixed effects (and by correlations with random effects):\n")
+  # print(x$fixed, ...)
+  # cat("\n   Partial explained variation by fixed effects (excluding by correlations with random effects):\n")
+  # print(x$fixedPartial, ...)
+  # cat("\n   Partial explained variation by fixed effects (including by correlations with random effects):\n")
+  # print(x$fixedPartial.XZ, ...)
   
   cat("\nExplained variation by random effects:\n")
   print(x$random)
