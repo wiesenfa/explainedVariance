@@ -110,13 +110,17 @@ decomp <- function(X, Z,
     Rxz <- sapply(names(su),
                   function(id)  2 *  t(b.hat) %*% t(X) %*% Z[[id]] %*% u.tilde[[id]] / (n - 1)
     )
-
+    Rxz.part <- sapply(names(su),
+                      function(id) var.part_XZ(b=bh, u.tilde[[id]], Sxz= ( t(Xc) %*% Z[[id]] / (n - 1)   ) ) 
+    )
+    
 
   return( list(se2=se2,
                Rxpart = Rxpart, Rx = Rx,
                Rz.1 = Rz.1, Rz.2 = Rz.2,
                Rz.pairs = Rz.pairs,
-               Rxz = Rxz) )
+               Rxz = Rxz,
+               Rxz.part = Rxz.part) )
 }
 
 
