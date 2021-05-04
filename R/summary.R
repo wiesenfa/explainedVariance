@@ -53,8 +53,14 @@ summary.VarExpProp <-function(object,...)  {
                      class = "summary.VarExpProp"))
     
   } else {
-    fixed <- c(X=object$Rx)
+    fixedTotal <- c(object$Rx)
     fixedPartial <- rowSums(object$Rx.part)
+    fixed <- cbind(" " = fixedPartial   
+                   )
+    
+    if (nrow(fixed)>1) fixed <- rbind(fixed,
+                                      "total "= fixedTotal
+    )
     
     random <- cbind("population"= object$Rz.1 )
     if (nrow(random)>1) random <- rbind(random,
