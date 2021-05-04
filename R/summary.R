@@ -5,15 +5,28 @@
 #' @export
 #' @rdname summaries
 summary.VarExp <-function(object,...){
-  fixed <- c(X=object$Rx, X=object$Rxz,total=object$Rx+sum(object$Rxz))
-  fixedPartial <- rowSums(object$Rxpart)
+  fixedTotal <- c(X=object$Rx, 
+             XZ=sum(object$Rxz),
+             total=object$Rx+sum(object$Rxz))
+  
+  fixedPartial <- rowSums(object$Rx.part)
+  fixedPartial.XZ <- 2 * rowSums(object$Rxz.part)
+  
+  fixed <- cbind(" " = fixedPartial, 
+          "Z.*"= fixedPartial.XZ, 
+          "sum "= fixedPartial + fixedPartial.XZ
+          )
+  
+  if (nrow(fixed)>1) fixed <- rbind(fixed,
+                                    "total "= fixedTotal
+                                    )
   
   random <- cbind("population"= object$Rz.1,
                   "data-specific deviation"=object$Rz.2, 
                   "data-specific" = object$Rz.1+object$Rz.2,
                   "X.*"= object$Rxz,
                   "explainedCovariance"=rowSums(object$Rz.pairs, na.rm = TRUE),
-                  "total"= object$Rz.1+object$Rz.2+object$Rxz+rowSums(object$Rz.pairs, na.rm = T)
+                  "sum "= object$Rz.1+object$Rz.2+object$Rxz+rowSums(object$Rz.pairs, na.rm = T)
                   )
   if (nrow(random)>1) random <- rbind(random,
                                       total = colSums(random, 
@@ -22,11 +35,10 @@ summary.VarExp <-function(object,...){
   total <- object$var.y
   error <- object$error
   return(structure(list(fixed = fixed,
-                     fixedPartial = fixedPartial,
-                     random = random,
-                     unexplained = unexplained,
-                     total = total,
-                     error = error
+                        random = random,
+                        unexplained = unexplained,
+                        total = total,
+                        error = error
   ), 
   class = "summary.VarExp"))
 }
@@ -42,7 +54,7 @@ summary.VarExpProp <-function(object,...)  {
     
   } else {
     fixed <- c(X=object$Rx)
-    fixedPartial <- rowSums(object$Rxpart)
+    fixedPartial <- rowSums(object$Rx.part)
     
     random <- cbind("population"= object$Rz.1 )
     if (nrow(random)>1) random <- rbind(random,
@@ -67,12 +79,12 @@ summary.VarExpProp <-function(object,...)  {
 summary.VarExp.boot <-function(object, 
                                probs = c(.025,.975),
                                ...){
-  bt=apply(object$t[,-grep("Rxpart.", colnames(object$t), fixed=T)], 
+  bt=apply(object$t[,-grep("Rx.part.", colnames(object$t), fixed=T)], 
            2, 
            quantile, 
            probs = probs, 
            na.rm=TRUE)
-  bt0=object$t0[-grep("Rxpart.", names(object$t0), fixed=T)]
+  bt0=object$t0[-grep("Rx.part.", names(object$t0), fixed=T)]
   object = as.data.frame(t(rbind(bt0, bt)))
   
   Rxz = object[grep("Rxz",rownames(object)),]
@@ -80,8 +92,8 @@ summary.VarExp.boot <-function(object,
   fixed <- rbind(X = object["Rx",],
                  "X"= Rxz,
                  Sum = object["Rx.Sum",])
-  fixedPartial <- object[grep("RxpartRowSums", rownames(object)),]
-  rownames(fixedPartial) <- gsub("RxpartRowSums.", "", rownames(fixedPartial), fixed=F)
+  fixedPartial <- object[grep("Rx.partRowSums", rownames(object)),]
+  rownames(fixedPartial) <- gsub("Rx.partRowSums.", "", rownames(fixedPartial), fixed=F)
   
   random <- rbind("population: " = object[grep("Rz.1", rownames(object)),],
                   "data-specific deviation: " = object[grep("Rz.2", rownames(object)),],
@@ -124,17 +136,17 @@ summary.VarExpProp.boot <-function(object,
                      class = "summary.VarExpProp"))
     
   } else {
-    bt=apply(object$t[,-grep("Rxpart.", colnames(object$t), fixed=T)], 
+    bt=apply(object$t[,-grep("Rx.part.", colnames(object$t), fixed=T)], 
              2, 
              quantile, 
              probs = probs, 
              na.rm=TRUE)
-    bt0=object$t0[-grep("Rxpart.", names(object$t0), fixed=T)]
+    bt0=object$t0[-grep("Rx.part.", names(object$t0), fixed=T)]
     object = as.data.frame(t(rbind(bt0, bt)))
     
     fixed <- rbind(X = object["Rx",])
-    fixedPartial <- object[grep("RxpartRowSums", rownames(object)),]
-    rownames(fixedPartial) <- gsub("RxpartRowSums.", "", rownames(fixedPartial), fixed=F)
+    fixedPartial <- object[grep("Rx.partRowSums", rownames(object)),]
+    rownames(fixedPartial) <- gsub("Rx.partRowSums.", "", rownames(fixedPartial), fixed=F)
     
     random <- rbind("population: " = object[grep("Rz.1", rownames(object)),])
     rownames(random) <- gsub(".Rz.1.","",rownames(random), fixed=F)
