@@ -11,9 +11,9 @@ proportionOf(object, ...)
 
 \method{proportionOf}{default}(object, ...)
 
-\method{proportionOf}{VarExp}(object, type = "dataset-specific")
+\method{proportionOf}{VarExp}(object, type = "dataset-specific", ...)
 
-\method{proportionOf}{VarExp.boot}(object, type = "dataset-specific")
+\method{proportionOf}{VarExp.boot}(object, type = "dataset-specific", ...)
 }
 \arguments{
 \item{object}{\code{varExp} object created by \code{\link[varianceExplainedPack:varianceExplained]{varianceExplainedPack::varianceExplained()}}.}
