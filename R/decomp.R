@@ -18,6 +18,20 @@ var.part <- function(b, Sx, Sb){
 }
 
 
+# parital variance including correlations with random effects
+var.part_XZ <- function(b, u, Sxz){
+  k <- length(b)
+  p <- length(u)
+  rxz <- matrix(NA, k, p)
+  for(i in 1 : k){
+    for(j in 1 : p){
+      rxz[i, j] <- ( b[i] * u[j] ) * Sxz[i, j] 
+    }
+  }
+  rxz
+}
+
+
 compute_h1 = function(Xc, Z,
                       su, se2){
   Z <- Z[names(su)]
