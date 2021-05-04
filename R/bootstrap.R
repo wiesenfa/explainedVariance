@@ -10,12 +10,12 @@ matrixToVector <- function(x){
 varianceExplainedToVector <- function(x){
   vv <- varianceExplained(x)
   vv$Rx.Sum = vv$Rx+sum(vv$Rxz)
-  vv$RxpartRowSums = rowSums(vv$Rxpart)
+  vv$Rx.partRowSums = rowSums(vv$Rx.part)
   vv$Rz.pairsRowSums <- rowSums(vv$Rz.pairs, na.rm = T)
   vv$Rz.sum = vv$Rz.1+vv$Rz.2
   vv$Rz.total =  vv$Rz.sum +vv$Rxz+vv$Rz.pairsRowSums
   vv$Rz.pairs= matrixToVector(vv$Rz.pairs)
-  vv$Rxpart= matrixToVector(vv$Rxpart)
+  vv$Rx.part= matrixToVector(vv$Rx.part)
   unlist(vv)
 }
 
@@ -44,7 +44,7 @@ vectorToVarExp <- function(x){
   structure(list(
     var.y=x["var.y"],
     se2=x["se2"],
-    Rxpart = vectorToMatrix(extractMatrix(x, "Rxpart")),
+    Rx.part = vectorToMatrix(extractMatrix(x, "Rx.part")),
     Rx=x["Rx"],
     Rz.1=x[grep("Rz.1",names(x))],
     Rz.2=x[grep("Rz.2",names(x))],
