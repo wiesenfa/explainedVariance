@@ -33,7 +33,7 @@ proportionOf.VarExp <- function(object,
   structure(c(res,
                list(
                  Rx = object$Rx / denom,
-                 Rxpart = object$Rxpart / denom,
+                 Rx.part = object$Rx.part / denom,
                  Rz.1 = object$Rz.1 / denom,
                  se2 = object$se2 / denom,
                  var.y = denom,
