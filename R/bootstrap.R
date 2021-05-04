@@ -63,19 +63,19 @@ vectorToVarExp <- function(x){
 #' @param object a \code{lmerMod} or \code{lmerModLmerTest} object created by \code{\link[lme4:lmer]{lme4::lmer()}} or \code{\link[lmerTest:lmer]{lmerTest::lmer()}}, respectively, or a \code{mmer} object created by  \code{\link[sommer:mmer]{sommer::mmer()}}.
 #' @param ... arguments passed to  \code{\link[lme4:bootMer]{lme4::bootMer()}}, in particular \code{nsim} for the number of simulations, thy type of bootstrap and arguments for parallel computing
 #' @export
-#' @rdname bootstrap
-bootstrap <- function(object,...) UseMethod("bootstrap")
+#' @rdname bootVarianceExplained
+bootVarianceExplained <- function(object,...) UseMethod("bootVarianceExplained")
 
 #' @export
-#' @rdname bootstrap
-bootstrap.default <- function(object, ...) stop("not implemented for this class")
+#' @rdname bootVarianceExplained
+bootVarianceExplained.default <- function(object, ...) stop("not implemented for this class")
 
 
 #' @importFrom lme4 bootMer
 #' @importFrom stats quantile
 #' @export
-#' @rdname bootstrap
-bootstrap.lmerMod <- bootstrap.lmerModLmerTest <- function(object, ...){
+#' @rdname bootVarianceExplained
+bootVarianceExplained.lmerMod <- bootVarianceExplained.lmerModLmerTest <- function(object, ...){
   bootobj = bootMer(object,
                     varianceExplainedToVector,
                     ...)
