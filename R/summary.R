@@ -177,25 +177,36 @@ summary.VarExpProp.boot <-function(object,
                      class = "summary.VarExpProp"))
     
   } else {
-    bt=apply(object$t[,-grep("Rx.part.", colnames(object$t), fixed=T)], 
+    bt=apply(object$t[,-grep("Rxpart.", colnames(object$t), fixed=T)], 
              2, 
              quantile, 
              probs = probs, 
              na.rm=TRUE)
-    bt0=object$t0[-grep("Rx.part.", names(object$t0), fixed=T)]
+    bt0=object$t0[-grep("Rxpart.", names(object$t0), fixed=T)]
     object = as.data.frame(t(rbind(bt0, bt)))
+    colnames(object)[1]=""
+
+    fixedTotal <- rbind(X = object["Rx",])
+    fixedPartial <- object[grep("RxpartRowSums", rownames(object)),]
+    rownames(fixedPartial) <- gsub("RxpartRowSums.", "", rownames(fixedPartial), fixed=F)
+
+    fixed <- cbind(" " =fixedPartial )
     
-    fixed <- rbind(X = object["Rx",])
-    fixedPartial <- object[grep("Rx.partRowSums", rownames(object)),]
-    rownames(fixedPartial) <- gsub("Rx.partRowSums.", "", rownames(fixedPartial), fixed=F)
+    if (nrow(fixed)>1) fixed <- rbind(fixed,
+                                      "total"= cbind(" "=fixedTotal)
+                                      )
     
-    random <- rbind("population: " = object[grep("Rz.1", rownames(object)),])
-    rownames(random) <- gsub(".Rz.1.","",rownames(random), fixed=F)
-    # if (nrow(random)>1) random <- rbind(random,
-    #                                     total = colSums(random, 
-    #                                                     na.rm = TRUE))
+    random <- cbind("population" = object[grep("Rz.1", rownames(object)),])
+    rownames(random) <- gsub("Rz.1.","",rownames(random), fixed=F)
+    
+    randomTotal =cbind("population" = object[grep("Rz1.combined", rownames(object)),])
+                         
+    if (nrow(random)>1) random <- rbind(random,
+                                        total = randomTotal)
+    
     unexplained <- object[grep("se2",rownames(object)),] 
     total <- object[grep("var.y",rownames(object)),] 
+    
     return(structure(list(fixed = fixed,
                           fixedPartial = fixedPartial,
                           random = random,
