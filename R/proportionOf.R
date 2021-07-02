@@ -57,7 +57,7 @@ proportionOf.VarExp.boot <- function(object,
                         function(samp.i) samp.i / samp.i["var.y"]
                         ))
   }  else {
-    object$t0 <-   object$t0 / object$t0["Rx"] + sum(object$t0[grep("Rz.1", names(object$t0))]) + object$t0["se2"]
+    object$t0 <-   object$t0 / (object$t0["Rx"] + sum(object$t0[grep("Rz.1", names(object$t0))]) + object$t0["se2"])
     object$t <- t(apply(object$t,
                         1,
                         function(samp.i) samp.i / (samp.i["Rx"] + sum(samp.i[grep("Rz.1", names(samp.i))]) + samp.i["se2"])
