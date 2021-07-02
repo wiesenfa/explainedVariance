@@ -24,10 +24,14 @@ summary.VarExp <-function(object,...){
   random <- cbind("population"= object$Rz.1,
                   "data-specific deviation"=object$Rz.2, 
                   "data-specific" = object$Rz.1+object$Rz.2,
-                  "X.*"= object$Rxz,
-                  "explainedCovariance"=rowSums(object$Rz.pairs, na.rm = TRUE),
-                  "sum"= object$Rz.1+object$Rz.2+object$Rxz+rowSums(object$Rz.pairs, na.rm = T)
+                  "X.*"= object$Rxz
                   )
+  if (length(object$Rz.pairs)>0) {
+    random <- cbind(random,
+                    "explainedCovariance"=rowSums(object$Rz.pairs, na.rm = TRUE),
+                    "sum"= object$Rz.1+object$Rz.2+object$Rxz+rowSums(object$Rz.pairs, na.rm = T)
+    )
+  }
   if (nrow(random)>1) random <- rbind(random,
                                       total = colSums(random, 
                                                       na.rm = TRUE))
@@ -111,28 +115,38 @@ summary.VarExp.boot <-function(object,
   
   if (nrow(fixed)>1) fixed <- rbind(fixed,
                                     "total"= fixedTotal
-  )
+                                    )
   
-
-  
-  random <- t(cbind("population" = object[grep("Rz.1", rownames(object)),],
+  random <- cbind("population" = object[grep("Rz.1", rownames(object)),],
                   "data-specific deviation" = object[grep("Rz.2", rownames(object)),],
                   "data-specific" = object[grep("Rz.sum", rownames(object)),],
-                  "X.*" = object[grep("Rxz.", rownames(object),fixed=T),],
-                  "explainedCovariance" = object[grep("Rz.pairsRowSums", rownames(object)),],
-                  "sum"= object[grep("Rz.total", rownames(object)),]
-  ))
+                  "X.*" = object[grep("Rxz.", rownames(object),fixed=T),]
+                  )
+  
+  if (nrow(object[grep("Rz.pairsRowSums", rownames(object)),])>0) {
+    random <- cbind(random,
+                    "explainedCovariance" = object[grep("Rz.pairsRowSums", rownames(object)),],
+                    "sum"= object[grep("Rz.total", rownames(object)),]
+                    )
+  }
+  random <- t(random)
   colnames(random) <- gsub("Rz.1.","",colnames(random), fixed=F)
-
-  randomTotal =t(cbind("population" = object[grep("Rz1.combined", rownames(object)),],
-          "data-specific deviation" =object[grep("Rz2.combined", rownames(object)),],
-          "data-specific" = object[grep("Rzsum.combined", rownames(object)),],
-          "X.*" = object[grep("RxzSum", rownames(object),fixed=T),],
-          "explainedCovariance" = object[grep("RzpairsRowSums.combined", rownames(object)),],
-          "sum"= object[grep("Rztotal.combined", rownames(object)),]
-  ))
+  
+  randomTotal = cbind("population" = object[grep("Rz1.combined", rownames(object)),],
+                       "data-specific deviation" =object[grep("Rz2.combined", rownames(object)),],
+                       "data-specific" = object[grep("Rzsum.combined", rownames(object)),],
+                       "X.*" = object[grep("RxzSum", rownames(object),fixed=T),]
+                      )
+  if (nrow(object[grep("Rz.pairsRowSums", rownames(object)),])>0) {
+    randomTotal <- cbind(randomTotal,
+                         "explainedCovariance" = object[grep("RzpairsRowSums.combined", rownames(object)),],
+                         "sum"= object[grep("Rztotal.combined", rownames(object)),]
+                         )
+  }
+  
+  randomTotal <- t(randomTotal)
   colnames(randomTotal) <- "total"
-
+  
   if (ncol(random)>1) random <- cbind(random,
                                       total = randomTotal)
   
