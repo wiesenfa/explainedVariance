@@ -11,24 +11,23 @@ varianceExplainedToVector <- function(x){
   vv <- varianceExplained(x)
   vv$RxzSum= sum(vv$Rxz)
   vv$RxSum = vv$Rx+sum(vv$Rxz)
+  vv$Rxpart= matrixToVector(vv$Rx.part)
   vv$RxpartRowSums = rowSums(vv$Rx.part)
   vv$RxzpartRowSums = 2 * rowSums(vv$Rxz.part)
   vv$RxpartTotal = vv$RxpartRowSums + vv$RxzpartRowSums
-  vv$Rz.pairsRowSums <- rowSums(vv$Rz.pairs, na.rm = T)
   vv$Rz.sum = vv$Rz.1+vv$Rz.2
-  vv$Rz.total =  vv$Rz.sum +vv$Rxz+vv$Rz.pairsRowSums
-  vv$Rz.pairs= matrixToVector(vv$Rz.pairs)
-  vv$Rxpart= matrixToVector(vv$Rx.part)
-  vv$Rx.part <- vv$Rxz.part <- NULL
-  
   vv$Rz1.combined= sum(vv$Rz.1)
   vv$Rz2.combined= sum(vv$Rz.2)
   vv$Rzsum.combined= sum(vv$Rz.sum)
-  vv$RzpairsRowSums.combined = sum(vv$Rz.pairsRowSums)
-  vv$Rztotal.combined = sum(vv$Rz.total)
-  
-  
+  if (!is.null(vv$Rz.pairs)) {
+    vv$Rz.pairsRowSums <- rowSums(vv$Rz.pairs, na.rm = T)
+    vv$Rz.total =  vv$Rz.sum +vv$Rxz+vv$Rz.pairsRowSums
+    vv$Rz.pairs= matrixToVector(vv$Rz.pairs)
+    vv$RzpairsRowSums.combined = sum(vv$Rz.pairsRowSums)
+    vv$Rztotal.combined = sum(vv$Rz.total)
+  }
 
+  vv$Rx.part <- vv$Rxz.part <- NULL
   unlist(vv)
 }
 
