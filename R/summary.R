@@ -89,6 +89,7 @@ summary.VarExpProp <-function(object,...)  {
 summary.VarExp.boot <-function(object, 
                                probs = c(.025,.975),
                                ...){
+  # uses bootsrap percentile confidence intervals always. could be made more flexible using boot::boot.ci().
   bt=apply(object$t[,-grep("Rxpart.", colnames(object$t), fixed=T)], 
            2, 
            quantile, 

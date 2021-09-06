@@ -70,7 +70,7 @@ vectorToVarExp <- function(x){
 
 
 
-#' Derive bootstrap confidence intervals for variance decomposition
+#' Derive bootstrap confidence intervals for variance decomposition (based on percentile method)
 #' 
 #' @param object a \code{lmerMod} or \code{lmerModLmerTest} object created by \code{\link[lme4:lmer]{lme4::lmer()}} or \code{\link[lmerTest:lmer]{lmerTest::lmer()}}, respectively, or a \code{mmer} object created by  \code{\link[sommer:mmer]{sommer::mmer()}}.
 #' @param ... arguments passed to  \code{\link[lme4:bootMer]{lme4::bootMer()}}, in particular \code{nsim} for the number of simulations, thy type of bootstrap and arguments for parallel computing
