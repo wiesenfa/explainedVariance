@@ -113,6 +113,9 @@ decomp <- function(X, Z,
     Rxz.part <- sapply(names(su),
                       function(id) rowSums(var.part_XZ(b=b.hat, u.tilde[[id]], Sxz= ( t(X) %*% Z[[id]] / (n - 1)   ) )) 
                       )
+    if (!is.matrix(Rxz.part)){ # for cases where there is only one fixed effect
+      Rxz.part <- t(as.matrix(Rxz.part))
+    }
     rownames(Rxz.part) <- colnames(X)
 
   return( list(se2=se2,
