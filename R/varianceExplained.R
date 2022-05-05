@@ -136,16 +136,18 @@ varianceExplained.mmer <- function(object, X, Z, ...){
   # get variance components
     se2 <- as.numeric( object$sigma$units )
     su<-  unlist(object$sigma[-which(names(object$sigma)=="units")],
-           recursive = F)
-
+                 recursive = F)
+    
   # get estimates
     b.hat <- as.numeric( object$Beta$Estimate )[-1]
     S.b.hat <- object$VarBeta[-1, -1]
-    u.tilde <-  lapply(object$U, function(x) x$y)
-
+    u.tilde <- lapply(object$U, 
+                      function(x) x[[object$terms$response[[1]]]])
+    
   # variance-covariance matrix for  BLUPs
-    var.u <-  lapply(object$VarU, function(x) x$y)
-
+    var.u <- lapply(object$VarU, 
+                    function(x) x[[object$terms$response[[1]]]])
+    
   h1 <- compute_h1(Xc = X, Z = Z, su, se2)
 
   # decomposition works with centered matrices!
