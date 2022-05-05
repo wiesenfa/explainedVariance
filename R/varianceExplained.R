@@ -87,6 +87,7 @@ varianceExplained.lmerMod <- varianceExplained.lmerModLmerTest <- function(objec
     u.tilde <- unlist(ranef(object,condVar = FALSE), recursive = F)
 
   # assign names to Z matrices
+    # CHECK WHETHER NECESSARY!!!
     names(su)  <- names(u.tilde)
     
 
@@ -123,7 +124,7 @@ varianceExplained.lmerMod <- varianceExplained.lmerModLmerTest <- function(objec
 
 
 #' @param X Design matrix for fixed effects
-#' @param Z named List of desgin matrices for random effects (one list element for each effect).
+#' @param Z *named* List of desgin matrices for random effects (one list element for each effect).
 #' @importFrom stats model.frame model.response
 #' @export
 #' @rdname varianceExplained
@@ -168,3 +169,55 @@ varianceExplained.mmer <- function(object, X, Z, ...){
   class = "VarExp")
   return(deco)
 }
+
+#' @export
+varianceExplained.matrix <- function(X, 
+                                  Z, #list
+                                  fixef, #fixed effects excluding intercept
+                                  ranef,
+                                  vcov, #excluding intercept
+                                  var.u,
+                                  var.eps,
+                                  var.y,...
+){   
+  # center matrices
+  X <- scale(X, center = TRUE, scale = FALSE)
+  Z <- lapply(Z, function(x) scale( x, center = TRUE, scale = FALSE))
+  
+  # get variance components
+  se2 <- var.eps #as.numeric( object$sigma$units )
+  su<-  var.u #unlist(object$sigma[-which(names(object$sigma)=="units")],  recursive = F)
+  
+  # get estimates
+  b.hat <- fixef #fixef(object)[-1]
+  S.b.hat <- vcov #vcov(object, full = FALSE)[-1, -1]
+  u.tilde <- ranef # unlist(ranef(object,condVar = FALSE), recursive = F)
+  names(su)  <- names(u.tilde)
+  
+  h1 <- compute_h1(Xc = X, Z = Z, su, se2)
+  # variance-covariance matrix for  BLUPs
+  var.u <- sapply(names(su),
+                  function(id) su[id]^2 * t(Z[[id]]) %*% h1 %*% Z[[id]] / se2,
+                  simplify = FALSE
+  )
+  
+  
+  # decomposition works with centered matrices!
+  deco <- decomp(X = X, Z = Z,
+                 se2 = se2, su = su,
+                 b.hat = b.hat, S.b.hat = S.b.hat,
+                 u.tilde = u.tilde,
+                 var.u =var.u, h1 = h1
+  )
+  deco= structure(c(var.y = var.y, 
+                    deco,
+                    error = var.y - deco$se2 - 
+                      deco$Rx - 
+                      sum(deco$Rz.1 + deco$Rz.2) -  
+                      sum(deco$Rz.pairs, na.rm = TRUE) - 
+                      sum(deco$Rxz)
+  ), 
+  class = "VarExp")
+  return(deco)
+}
+
