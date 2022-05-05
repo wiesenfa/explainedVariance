@@ -28,5 +28,12 @@ varianceExplained(object, ...)
 a varExp object
 }
 \description{
-Derive variance decomposition
+Provide description here
+}
+\details{
+Provide details here
+}
+\examples{
+# provide some example code
+
 }

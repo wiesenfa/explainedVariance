@@ -1,7 +1,18 @@
+#' @title
 #' Derive variance decomposition
+#' 
+#' @description
+#' Provide description here
+#' 
+#' @details
+#' Provide details here
 #' 
 #' @param object a \code{lmerMod} or \code{lmerModLmerTest} object created by \code{\link[lme4:lmer]{lme4::lmer()}} or \code{\link[lmerTest:lmer]{lmerTest::lmer()}}, respectively, or a \code{mmer} object created by  \code{\link[sommer:mmer]{sommer::mmer()}}.
 #' @param ... Currently no additional arguments
+#' 
+#' @examples 
+#' # provide some example code
+#' 
 #' @return a varExp object
 #' @export
 #' @rdname varianceExplained
