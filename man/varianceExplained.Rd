@@ -22,7 +22,7 @@ varianceExplained(object, ...)
 
 \item{X}{Design matrix for fixed effects}
 
-\item{Z}{named List of desgin matrices for random effects (one list element for each effect).}
+\item{Z}{\emph{named} List of desgin matrices for random effects (one list element for each effect).}
 }
 \value{
 a varExp object

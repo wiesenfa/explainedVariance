@@ -4,7 +4,7 @@
 \alias{bootVarianceExplained}
 \alias{bootVarianceExplained.default}
 \alias{bootVarianceExplained.lmerMod}
-\title{Derive bootstrap confidence intervals for variance decomposition}
+\title{Derive bootstrap confidence intervals for variance decomposition (based on percentile method)}
 \usage{
 bootVarianceExplained(object, ...)
 
@@ -18,5 +18,5 @@ bootVarianceExplained(object, ...)
 \item{...}{arguments passed to  \code{\link[lme4:bootMer]{lme4::bootMer()}}, in particular \code{nsim} for the number of simulations, thy type of bootstrap and arguments for parallel computing}
 }
 \description{
-Derive bootstrap confidence intervals for variance decomposition
+Derive bootstrap confidence intervals for variance decomposition (based on percentile method)
 }

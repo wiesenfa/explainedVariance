@@ -23,5 +23,12 @@
 \item{probs}{quantiles}
 }
 \description{
-Summary for (proportion of) variance explained by variance components
+Provide description here
+}
+\details{
+Provide details here
+}
+\examples{
+# provide some example code
+
 }

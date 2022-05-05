@@ -1,7 +1,18 @@
+#' @title
 #' Summary for (proportion of) variance explained by variance components
+#' 
+#' @description
+#' Provide description here
+#' 
+#' @details
+#' Provide details here
 #' 
 #' @param object \code{varExp} object created by \code{\link[varianceExplainedPack:varianceExplained]{varianceExplainedPack::varianceExplained()}}.or \code{varExpProp} object created by \code{\link[varianceExplainedPack:proportionOf]{varianceExplainedPack::proportionOf()}}
 #' @param ... currently not supported
+#' 
+#' @examples 
+#' # provide some example code
+#' 
 #' @export
 #' @rdname summaries
 summary.VarExp <-function(object,...){
