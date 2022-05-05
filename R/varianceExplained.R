@@ -159,8 +159,10 @@ varianceExplained.mmer <- function(object, X, Z, cholesky=TRUE, ...){
     var.u <- lapply(object$VarU, 
                     function(x) x[[object$terms$response[[1]]]])
     
-  h1 <- compute_h1(Xc = X, Z = Z, su, se2, cholesky = cholesky)
-
+  if (length(su)>1)  h1 <- compute_h1(Xc = X, Z = Z, su, se2, cholesky = cholesky)
+  else h1 <- NULL
+    
+    
   # decomposition works with centered matrices!
   deco <- decomp(X = X, Z = Z,
                  se2 = se2, su = su,
