@@ -27,7 +27,7 @@ varianceExplained.default <- function(object, ...) stop("not implemented for thi
 #' @importFrom stats sigma var vcov
 #' @export
 #' @rdname varianceExplained
-varianceExplained.lmerMod <- varianceExplained.lmerModLmerTest <- function(object, ...){
+varianceExplained.lmerMod <- varianceExplained.lmerModLmerTest <- function(object, cholesky=TRUE, ...){
 
   # get matrices
     X <-getME(object,"X")[,-1, drop = FALSE]
@@ -102,7 +102,7 @@ varianceExplained.lmerMod <- varianceExplained.lmerModLmerTest <- function(objec
     names(su)  <- names(u.tilde)
     
 
-  h1 <- compute_h1(Xc = X, Z = Z, su, se2)
+  h1 <- compute_h1(Xc = X, Z = Z, su, se2, cholesky = cholesky)
 
   # variance-covariance matrix for  BLUPs
     var.u <- sapply(names(su),
@@ -139,7 +139,7 @@ varianceExplained.lmerMod <- varianceExplained.lmerModLmerTest <- function(objec
 #' @importFrom stats model.frame model.response
 #' @export
 #' @rdname varianceExplained
-varianceExplained.mmer <- function(object, X, Z, ...){   
+varianceExplained.mmer <- function(object, X, Z, cholesky=TRUE, ...){   
   # center matrices
     X <- scale(X, center = TRUE, scale = FALSE)
     Z <- lapply(Z, function(x) scale( x, center = TRUE, scale = FALSE))
@@ -159,7 +159,7 @@ varianceExplained.mmer <- function(object, X, Z, ...){
     var.u <- lapply(object$VarU, 
                     function(x) x[[object$terms$response[[1]]]])
     
-  h1 <- compute_h1(Xc = X, Z = Z, su, se2)
+  h1 <- compute_h1(Xc = X, Z = Z, su, se2, cholesky = cholesky)
 
   # decomposition works with centered matrices!
   deco <- decomp(X = X, Z = Z,
@@ -191,7 +191,8 @@ varianceExplained.matrix <- function(X,
                                   vcov, #excluding intercept
                                   var.u,
                                   var.eps,
-                                  var.y,...
+                                  var.y, 
+                                  cholesky=TRUE,...
 ){   
   # center matrices
   X <- scale(X, center = TRUE, scale = FALSE)

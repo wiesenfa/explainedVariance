@@ -33,17 +33,21 @@ var.part_XZ <- function(b, u, Sxz){
 
 
 compute_h1 = function(Xc, Z,
-                      su, se2){
+                      su, se2,
+                      cholesky = TRUE){
   Z <- Z[names(su)]
   q.vec= sapply(Z, ncol)
   Zc <- do.call(cbind, Z)
   n = nrow(Zc)
 
+  if (cholesky) SOLVE <- function(x) chol2inv(chol(x))
+  else SOLVE <- function(x) solve(x)
+    
   Hcm <- diag(1, n) - Zc %*%
-    solve( diag( rep(se2/su,q.vec) ) + crossprod(Zc) ) %*% t(Zc)
+    SOLVE( diag( rep(se2/su,q.vec) ) + crossprod(Zc) ) %*% t(Zc)
 
   HcmX <- Hcm %*% Xc
-  HcmXm <- solve( t(Xc) %*% HcmX )
+  HcmXm <- SOLVE( t(Xc) %*% HcmX )
   h1 <- Hcm - HcmX %*% HcmXm %*% t(HcmX)
   h1
 }
