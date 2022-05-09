@@ -78,14 +78,16 @@ decomp <- function(X, Z,
 
 
   # Explained variation by random effects
+    ZtZ <- sapply(names(su),
+                  function(id) crossprod(Z[[id]]) )
     Rz.1 <- sapply(names(su),
-                   function(id) unname(su[id]) * matrix_trace( crossprod(Z[[id]]) )  / (n - 1)
+                   function(id) unname(su[id]) * matrix_trace( ZtZ[[id]] )  / (n - 1)
                    )
     
     Rz.2 <- sapply(names(su),
                    function(id)  {
                      sum(  (Z[[id]] %*% u.tilde[[id]]) ^ 2 ) / (n - 1) -
-                       matrix_trace( var.u[[id]] %*% crossprod(Z[[id]]))  / (n - 1)
+                       matrix_trace( var.u[[id]] %*% ZtZ[[id]])  / (n - 1)
                    })
 
     
