@@ -16,10 +16,10 @@
 #' @return a varExp object
 #' @export
 #' @rdname varianceExplained
-varianceExplained <- function(object,...) UseMethod("varianceExplained")
+varianceExplained <- function(object, cholesky=TRUE,...) UseMethod("varianceExplained")
 
 #' @rdname varianceExplained
-varianceExplained.default <- function(object, ...) stop("not implemented for this class")
+varianceExplained.default <- function(object, cholesky=TRUE, ...) stop("not implemented for this class")
 
 
 #' @importFrom lme4 lFormula ranef fixef VarCorr getME
