@@ -120,12 +120,12 @@ varianceExplained.lmerMod <- varianceExplained.lmerModLmerTest <- function(objec
   deco <- structure(c(var.y = var.y,
                       deco,
                       error = var.y- deco$se2 - 
-                        deco$Rx - 
-                        sum(deco$Rz.1 + deco$Rz.2) -  
-                        sum(deco$Rz.pairs, na.rm = TRUE) - 
-                        sum(deco$Rxz)
+                        ifPresent(deco$Rx) - 
+                        ifPresent(sum(deco$Rz.1 + deco$Rz.2)) -  
+                        ifPresent(sum(deco$Rz.pairs, na.rm = TRUE)) - 
+                        ifPresent(sum(deco$Rxz))
   ), 
-                    class = "VarExp")
+  class = "VarExp")
   return(deco)
 }
 

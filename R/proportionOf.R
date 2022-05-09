@@ -28,7 +28,7 @@ proportionOf.VarExp <- function(object,
       error = object$error / denom
     )
   }  else {
-    denom <- object$Rx + sum(object$Rz.1) + object$se2
+    denom <- ifPresent(object$Rx) + sum(object$Rz.1) + object$se2
     res <- NULL
   }
   structure(c(res,
