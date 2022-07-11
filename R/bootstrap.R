@@ -93,6 +93,8 @@ bootVarianceExplained.lmerMod <- bootVarianceExplained.lmerModLmerTest <- functi
   bootobj = bootMer(object,
                     varianceExplainedToVector,
                     ...)
+  
+  bootobj$model <- object
   structure(bootobj,
             class = c("VarExp.boot", "bootMer", "boot"))
 }

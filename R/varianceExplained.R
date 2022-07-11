@@ -117,7 +117,8 @@ varianceExplained.lmerMod <- varianceExplained.lmerModLmerTest <- function(objec
                    var.u =var.u, h1 = h1
                    )
   var.y <- var(getME(object, "y"))
-  deco <- structure(c(var.y = var.y,
+  deco <- structure(c(model = object,
+                      var.y = var.y,
                       deco,
                       error = var.y- deco$se2 - 
                         ifPresent(deco$Rx) - 
@@ -173,7 +174,8 @@ varianceExplained.mmer <- function(object, X, Z, cholesky=TRUE, ...){
   var.y <- var(model.response(model.frame(object$call$fixed,
                                           data = object$dataOriginal)
                               ))
-  deco= structure(c(var.y = var.y, 
+  deco= structure(c(model = object,
+                    var.y = var.y, 
                     deco,
                     error = var.y - deco$se2 - 
                       deco$Rx - 
