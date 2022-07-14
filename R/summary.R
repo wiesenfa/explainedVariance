@@ -32,6 +32,10 @@ summary.VarExp <-function(object,...){
     if (nrow(fixed)>1) fixed <- rbind(fixed,
                                       "total"= fixedTotal
     )
+    if (inherits(object$model,c("lmerMod", "lmerModLmerTest"))){
+      # combine explained variance of factor levels
+        fixed = reduceFactors.matrix(fixed, object)
+    }
   } else fixed <- NULL
   
   if (length(object$Rz.1)>0){
@@ -83,6 +87,10 @@ summary.VarExpProp <-function(object,...)  {
       if (nrow(fixed)>1) fixed <- rbind(fixed,
                                         "total"= fixedTotal
       )
+      if (inherits(object$model,c("lmerMod", "lmerModLmerTest"))){
+        # combine explained variance of factor levels
+          fixed = reduceFactors.matrix(fixed, object)
+      }
     } else fixed <- fixedPartial <- NULL
     
     if (length(object$Rz.1)>0){
@@ -134,6 +142,7 @@ summary.VarExp.boot <-function(object,
                  "Z.*"= fixedPartial.XZ, 
                  "sum"= fixedPartialTotal
   )
+  
   
   if (nrow(fixed)>1) fixed <- rbind(fixed,
                                     "total"= fixedTotal
