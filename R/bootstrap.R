@@ -7,8 +7,9 @@ matrixToVector <- function(x){
   setNames(xx$value,xx$name)
 }
 
-varianceExplainedToVector <- function(x){
-  vv <- varianceExplained(x)
+varianceExplainedToVector <- function(x, X=NULL,Z=NULL){
+  if (inherits(vv$model,c("lmerMod", "lmerModLmerTest"))) vv <- varianceExplained(x)
+  else vv <- varianceExplained(x, X=X, Z=Z)
   if(!is.null(vv$Rx)){
     vv$RxzSum= sum(vv$Rxz)
     vv$RxSum = vv$Rx+sum(vv$Rxz)
@@ -16,9 +17,11 @@ varianceExplainedToVector <- function(x){
     vv$RxpartRowSums = rowSums(vv$Rx.part)
     vv$RxzpartRowSums = 2 * rowSums(vv$Rxz.part)
     
-    vv$RxpartRowSums = reduceFactors.numeric(fixed=vv$RxpartRowSums, object=vv)
-    vv$RxzpartRowSums = reduceFactors.numeric(fixed=vv$RxzpartRowSums, object=vv)
-    
+    if (inherits(vv$model,c("lmerMod", "lmerModLmerTest"))){
+      vv$RxpartRowSums = reduceFactors.numeric(fixed=vv$RxpartRowSums, object=vv)
+      vv$RxzpartRowSums = reduceFactors.numeric(fixed=vv$RxzpartRowSums, object=vv)
+    }
+
     vv$RxpartTotal = vv$RxpartRowSums + vv$RxzpartRowSums
   }
   vv$Rz.sum = vv$Rz.1+vv$Rz.2
@@ -104,5 +107,32 @@ bootVarianceExplained.lmerMod <- bootVarianceExplained.lmerModLmerTest <- functi
             class = c("VarExp.boot", "bootMer", "boot"))
 }
 
+bootVarianceExplained.mmer = function(object, X, Z, B=1000){
+  reform= as.formula(paste("~",paste(names(Z), collapse ="+")))
+  se2 <- as.numeric( object$sigma$units )
+  su<-  sqrt(unlist(object$sigma[-which(names(object$sigma)=="units")],
+                    recursive = F))
+  tstar =t(sapply(1:B,
+                  function(.){
+                    object$data$.ystar=
+                      object$fitted+
+                      rnorm(nrow(object$fitted), 0, sqrt(se2))+
+                      rowSums(sapply(names(su), 
+                                     function(i) Z[[i]]%*%rnorm(ncol(Z[[i]]),0, su[i])))
+                    
+                    
+                    varianceExplainedPack:::varianceExplainedToVector(mmer(.ystar ~ X, random= reform, 
+                                                   verbose=FALSE, 
+                                                   date.warning=FALSE, 
+                                                   data = object$data), 
+                                              X=X, Z=Z)
+                    
+                  }))
+  t0=varianceExplainedPack:::varianceExplainedToVector(object, X=X, Z=Z)
+  bootobj = list(t=tstar,  t0=t0)
+  bootobj$model <- object
+  structure(bootobj,
+            class = c("VarExp.boot"))#, "boot"))
+}
 
  

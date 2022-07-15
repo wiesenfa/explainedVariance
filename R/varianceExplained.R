@@ -174,7 +174,7 @@ varianceExplained.mmer <- function(object, X, Z, cholesky=TRUE, ...){
   var.y <- var(model.response(model.frame(object$call$fixed,
                                           data = object$dataOriginal)
                               ))
-  deco= structure(c(model = object,
+  deco= structure(c(model = list(object),
                     var.y = var.y, 
                     deco,
                     error = var.y - deco$se2 - 
