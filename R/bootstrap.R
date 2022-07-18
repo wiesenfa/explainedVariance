@@ -83,7 +83,7 @@ vectorToVarExp <- function(x){
 #' Derive bootstrap confidence intervals for variance decomposition (based on percentile method)
 #' 
 #' @param object a \code{lmerMod} or \code{lmerModLmerTest} object created by \code{\link[lme4:lmer]{lme4::lmer()}} or \code{\link[lmerTest:lmer]{lmerTest::lmer()}}, respectively, or a \code{mmer} object created by  \code{\link[sommer:mmer]{sommer::mmer()}}.
-#' @param ... arguments passed to  \code{\link[lme4:bootMer]{lme4::bootMer()}}, in particular \code{nsim} for the number of simulations, thy type of bootstrap and arguments for parallel computing
+#' @param ... arguments passed to  \code{\link[lme4:bootMer]{lme4::bootMer()}}, in particular \code{nsim} for the number of simulations, the type of bootstrap and arguments for parallel computing
 #' @export
 #' @rdname bootVarianceExplained
 bootVarianceExplained <- function(object,...) UseMethod("bootVarianceExplained")
@@ -107,12 +107,15 @@ bootVarianceExplained.lmerMod <- bootVarianceExplained.lmerModLmerTest <- functi
             class = c("VarExp.boot", "bootMer", "boot"))
 }
 
-bootVarianceExplained.mmer = function(object, X, Z, B=1000){
+#' @export
+#' @importFrom sommer mmer
+#' @rdname bootVarianceExplained
+bootVarianceExplained.mmer = function(object, X, Z, nsim=1000){
   reform= as.formula(paste("~",paste(names(Z), collapse ="+")))
   se2 <- as.numeric( object$sigma$units )
   su<-  sqrt(unlist(object$sigma[-which(names(object$sigma)=="units")],
                     recursive = F))
-  tstar =t(sapply(1:B,
+  tstar =t(sapply(1:nsim,
                   function(.){
                     object$data$.ystar=
                       object$fitted+
@@ -121,14 +124,14 @@ bootVarianceExplained.mmer = function(object, X, Z, B=1000){
                                      function(i) Z[[i]]%*%rnorm(ncol(Z[[i]]),0, su[i])))
                     
                     
-                    varianceExplainedPack:::varianceExplainedToVector(mmer(.ystar ~ X, random= reform, 
+                    varianceExplainedToVector(mmer(.ystar ~ X, random= reform, 
                                                    verbose=FALSE, 
                                                    date.warning=FALSE, 
                                                    data = object$data), 
                                               X=X, Z=Z)
                     
                   }))
-  t0=varianceExplainedPack:::varianceExplainedToVector(object, X=X, Z=Z)
+  t0=varianceExplainedToVector(object, X=X, Z=Z)
   bootobj = list(t=tstar,  t0=t0)
   bootobj$model <- object
   structure(bootobj,

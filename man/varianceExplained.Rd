@@ -11,9 +11,9 @@ varianceExplained(object, ...)
 
 \method{varianceExplained}{default}(object, ...)
 
-\method{varianceExplained}{lmerMod}(object, ...)
+\method{varianceExplained}{lmerMod}(object, cholesky = TRUE, ...)
 
-\method{varianceExplained}{mmer}(object, X, Z, ...)
+\method{varianceExplained}{mmer}(object, X, Z, cholesky = TRUE, ...)
 }
 \arguments{
 \item{object}{a \code{lmerMod} or \code{lmerModLmerTest} object created by \code{\link[lme4:lmer]{lme4::lmer()}} or \code{\link[lmerTest:lmer]{lmerTest::lmer()}}, respectively, or a \code{mmer} object created by  \code{\link[sommer:mmer]{sommer::mmer()}}.}
