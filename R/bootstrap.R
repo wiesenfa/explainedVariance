@@ -109,6 +109,7 @@ bootVarianceExplained.lmerMod <- bootVarianceExplained.lmerModLmerTest <- functi
 
 #' @export
 #' @importFrom sommer mmer
+#' @importFrom stats as.formula rnorm
 #' @rdname bootVarianceExplained
 bootVarianceExplained.mmer = function(object, X, Z, nsim=1000){
   reform= as.formula(paste("~",paste(names(Z), collapse ="+")))
