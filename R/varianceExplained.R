@@ -205,8 +205,8 @@ varianceExplained.lm <- varianceExplained.lmerModLmerTest <- function(object, ch
   # get estimates
   b.hat <- coef(object)[-1]
   S.b.hat <- vcov(object, full = FALSE)[-1, -1]
-  
-  h1 <- diag(1, nrow(X)) - X %*% HcmXm %*% t(X)
+ 
+  h1 <- diag(1, nrow(X)) - X %*% solve( crossprod(X) ) %*% t(X)
   #h1 <- compute_h1(Xc = X, Z = Z, su, se2, cholesky = T)
   
   Z=NULL
