@@ -19,4 +19,10 @@ R2.lmerMod<-  R2.lmerModLmerTest <- function(x){
   se2 <-sigma(x)^2
   1-(se2/var.y)
 }
-  
+
+#' @export
+#' @rdname R2
+R2.lm <- function(x, type="adjusted") {
+  if (type=="adjusted") summary(x)$adj.r.squared
+  else summary(x)$r.squared
+}

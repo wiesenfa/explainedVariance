@@ -4,6 +4,7 @@
 \alias{R2}
 \alias{R2.default}
 \alias{R2.lmerMod}
+\alias{R2.lm}
 \title{Coefficient of Determination}
 \usage{
 R2(x)
@@ -11,6 +12,8 @@ R2(x)
 \method{R2}{default}(x)
 
 \method{R2}{lmerMod}(x)
+
+\method{R2}{lm}(x, type = "adjusted")
 }
 \arguments{
 \item{x}{a \code{lmerMod} or \code{lmerModLmerTest} object created by \code{\link[lme4:lmer]{lme4::lmer()}} or \code{\link[lmerTest:lmer]{lmerTest::lmer()}}, respectively, or a \code{mmer} object created by  \code{\link[sommer:mmer]{sommer::mmer()}}.}

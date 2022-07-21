@@ -187,6 +187,53 @@ varianceExplained.mmer <- function(object, X, Z, cholesky=TRUE, ...){
   return(deco)
 }
 
+
+#' @importFrom Matrix t
+#' @importFrom stats sigma var vcov coef
+#' @importFrom stats model.frame model.response
+#' @export
+#' @rdname varianceExplained
+varianceExplained.lm <- varianceExplained.lmerModLmerTest <- function(object, cholesky=TRUE, ...){
+  
+  # get matrices
+  X <-model.matrix(object)[,-1, drop = FALSE]
+  X <- scale(X, center = TRUE, scale = FALSE)
+  
+  # get variance components
+  se2 <-sigma(object)^2
+  
+  # get estimates
+  b.hat <- coef(object)[-1]
+  S.b.hat <- vcov(object, full = FALSE)[-1, -1]
+  
+  h1 <- diag(1, nrow(X)) - X %*% HcmXm %*% t(X)
+  #h1 <- compute_h1(Xc = X, Z = Z, su, se2, cholesky = T)
+  
+  Z=NULL
+  var.u=su=u.tilde <-NA
+  
+  
+  # decomposition works with centered matrices!
+  deco <- decomp(X = X, Z = Z,
+                 se2 = se2, su = su,
+                 b.hat = b.hat, S.b.hat = S.b.hat,  u.tilde = u.tilde,
+                 var.u =var.u, h1 = h1
+  )
+  var.y <- var(model.response(model.frame(object)))
+  deco <- structure(c(model = object,
+                      var.y = var.y,
+                      deco,
+                      error = var.y- deco$se2 - 
+                        ifPresent(deco$Rx) - 
+                        ifPresent(sum(deco$Rz.1 + deco$Rz.2)) -  
+                        ifPresent(sum(deco$Rz.pairs, na.rm = TRUE)) - 
+                        ifPresent(sum(deco$Rxz))
+  ), 
+  class = "VarExp")
+  return(deco)
+}
+
+
 #' @export
 varianceExplained.matrix <- function(X, 
                                   Z, #list

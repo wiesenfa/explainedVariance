@@ -22,8 +22,11 @@ summary.VarExp <-function(object,...){
                     total=object$Rx+sum(object$Rxz))
     
     fixedPartial <- rowSums(object$Rx.part)
-    fixedPartial.XZ <- 2 * rowSums(object$Rxz.part)
-    
+    if (length(object$Rxz.part)>0) fixedPartial.XZ <- 2 * rowSums(object$Rxz.part)
+    else {
+      fixedPartial.XZ=NULL
+      fixedTotal <- fixedTotal["total"]
+    }
     fixed <- cbind(" " = fixedPartial, 
                    "Z.*"= fixedPartial.XZ, 
                    "sum"= fixedPartial + fixedPartial.XZ

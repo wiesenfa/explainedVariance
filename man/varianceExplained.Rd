@@ -5,6 +5,7 @@
 \alias{varianceExplained.default}
 \alias{varianceExplained.lmerMod}
 \alias{varianceExplained.mmer}
+\alias{varianceExplained.lm}
 \title{Derive variance decomposition}
 \usage{
 varianceExplained(object, ...)
@@ -14,6 +15,8 @@ varianceExplained(object, ...)
 \method{varianceExplained}{lmerMod}(object, cholesky = TRUE, ...)
 
 \method{varianceExplained}{mmer}(object, X, Z, cholesky = TRUE, ...)
+
+\method{varianceExplained}{lm}(object, cholesky = TRUE, ...)
 }
 \arguments{
 \item{object}{a \code{lmerMod} or \code{lmerModLmerTest} object created by \code{\link[lme4:lmer]{lme4::lmer()}} or \code{\link[lmerTest:lmer]{lmerTest::lmer()}}, respectively, or a \code{mmer} object created by  \code{\link[sommer:mmer]{sommer::mmer()}}.}
