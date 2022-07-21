@@ -8,7 +8,7 @@ matrixToVector <- function(x){
 }
 
 varianceExplainedToVector <- function(x, X=NULL,Z=NULL){
-  if (inherits(vv$model,c("lmerMod", "lmerModLmerTest"))) vv <- varianceExplained(x)
+  if (inherits(x, c("lmerMod", "lmerModLmerTest"))) vv <- varianceExplained(x)
   else vv <- varianceExplained(x, X=X, Z=Z)
   if(!is.null(vv$Rx)){
     vv$RxzSum= sum(vv$Rxz)
@@ -17,7 +17,7 @@ varianceExplainedToVector <- function(x, X=NULL,Z=NULL){
     vv$RxpartRowSums = rowSums(vv$Rx.part)
     vv$RxzpartRowSums = 2 * rowSums(vv$Rxz.part)
     
-    if (inherits(vv$model,c("lmerMod", "lmerModLmerTest"))){
+    if (inherits(x, c("lmerMod", "lmerModLmerTest"))){
       vv$RxpartRowSums = reduceFactors.numeric(fixed=vv$RxpartRowSums, object=vv)
       vv$RxzpartRowSums = reduceFactors.numeric(fixed=vv$RxzpartRowSums, object=vv)
     }
