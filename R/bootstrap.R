@@ -84,6 +84,8 @@ vectorToVarExp <- function(x){
 #' 
 #' @param object a \code{lmerMod} or \code{lmerModLmerTest} object created by \code{\link[lme4:lmer]{lme4::lmer()}} or \code{\link[lmerTest:lmer]{lmerTest::lmer()}}, respectively, or a \code{mmer} object created by  \code{\link[sommer:mmer]{sommer::mmer()}}.
 #' @param ... arguments passed to  \code{\link[lme4:bootMer]{lme4::bootMer()}}, in particular \code{nsim} for the number of simulations, the type of bootstrap and arguments for parallel computing
+#' @param parallel only mmer objects. TRUE for parallelization. Initiallize parallization e.g. with \code{library(doParallel); registerDoParallel(cores = 8)} before 
+#' @param progress only mmer objects. passed to plyr::llply 
 #' @export
 #' @rdname bootVarianceExplained
 bootVarianceExplained <- function(object,...) UseMethod("bootVarianceExplained")
@@ -109,29 +111,34 @@ bootVarianceExplained.lmerMod <- bootVarianceExplained.lmerModLmerTest <- functi
 
 #' @export
 #' @importFrom sommer mmer
+#' @importFrom plyr llply 
 #' @importFrom stats as.formula rnorm
 #' @rdname bootVarianceExplained
-bootVarianceExplained.mmer = function(object, X, Z, nsim=1000){
+bootVarianceExplained.mmer = function(object, X, Z, nsim=1000, parallel=FALSE,
+                                      progress="time", ...){
   reform= as.formula(paste("~",paste(names(Z), collapse ="+")))
   se2 <- as.numeric( object$sigma$units )
   su<-  sqrt(unlist(object$sigma[-which(names(object$sigma)=="units")],
                     recursive = F))
-  tstar =t(sapply(1:nsim,
-                  function(.){
-                    object$data$.ystar=
-                      object$fitted+
-                      rnorm(nrow(object$fitted), 0, sqrt(se2))+
-                      rowSums(sapply(names(su), 
-                                     function(i) Z[[i]]%*%rnorm(ncol(Z[[i]]),0, su[i])))
-                    
-                    
-                    varianceExplainedToVector(mmer(.ystar ~ X, random= reform, 
-                                                   verbose=FALSE, 
-                                                   date.warning=FALSE, 
-                                                   data = object$data), 
-                                              X=X, Z=Z)
-                    
-                  }))
+  tstar =t(simplify2array(llply(1:nsim,
+                                function(.){
+                                  object$data$.ystar=
+                                    object$fitted+
+                                    rnorm(nrow(object$fitted), 0, sqrt(se2))+
+                                    rowSums(sapply(names(su), 
+                                                   function(i) Z[[i]]%*%rnorm(ncol(Z[[i]]),0, su[i])))
+                                  
+                                  
+                                  varianceExplainedToVector(mmer(.ystar ~ X, random= reform, 
+                                                                 verbose=FALSE, 
+                                                                 date.warning=FALSE, 
+                                                                 data = object$data), 
+                                                            X=X, Z=Z)
+                                  
+                                },
+                                .parallel = parallel,
+                                .progress = progress
+  )))
   t0=varianceExplainedToVector(object, X=X, Z=Z)
   bootobj = list(t=tstar,  t0=t0)
   bootobj$model <- object
