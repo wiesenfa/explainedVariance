@@ -193,7 +193,7 @@ varianceExplained.mmer <- function(object, X, Z, cholesky=TRUE, ...){
 #' @importFrom stats model.frame model.response
 #' @export
 #' @rdname varianceExplained
-varianceExplained.lm <- varianceExplained.lmerModLmerTest <- function(object, cholesky=TRUE, ...){
+varianceExplained.lm <- function(object, cholesky=TRUE, ...){
   
   # get matrices
   X <-model.matrix(object)[,-1, drop = FALSE]
