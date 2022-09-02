@@ -1,6 +1,6 @@
 #' Coefficient of Determination
 #' 
-#' @param object a \code{lmerMod} or \code{lmerModLmerTest} object created by \code{\link[lme4:lmer]{lme4::lmer()}} or \code{\link[lmerTest:lmer]{lmerTest::lmer()}}, respectively, or a \code{mmer} object created by  \code{\link[sommer:mmer]{sommer::mmer()}}.
+#' @param x a \code{lmerMod} or \code{lmerModLmerTest} object created by \code{\link[lme4:lmer]{lme4::lmer()}} or \code{\link[lmerTest:lmer]{lmerTest::lmer()}}, respectively, or a \code{mmer} object created by  \code{\link[sommer:mmer]{sommer::mmer()}}.
 #' @export
 #' @rdname R2
 R2 <- function(x) UseMethod("R2")
@@ -19,4 +19,10 @@ R2.lmerMod<-  R2.lmerModLmerTest <- function(x){
   se2 <-sigma(x)^2
   1-(se2/var.y)
 }
-  
+
+#' @export
+#' @rdname R2
+R2.lm <- function(x, type="adjusted") {
+  if (type=="adjusted") summary(x)$adj.r.squared
+  else summary(x)$r.squared
+}
