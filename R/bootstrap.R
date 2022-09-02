@@ -11,11 +11,11 @@ varianceExplainedToVector <- function(x, X=NULL,Z=NULL){
   if (inherits(x, c("lmerMod", "lmerModLmerTest"))) vv <- varianceExplained(x)
   else vv <- varianceExplained(x, X=X, Z=Z)
   if(!is.null(vv$Rx)){
-    vv$RxzSum= sum(vv$Rxz)
-    vv$RxSum = vv$Rx+sum(vv$Rxz)
+    vv$RxzSum= sum(vv$Rxz)/2 
+    vv$RxSum = vv$Rx+sum(vv$Rxz)/2
     vv$Rxpart= matrixToVector(vv$Rx.part)
     vv$RxpartRowSums = rowSums(vv$Rx.part)
-    vv$RxzpartRowSums = 2 * rowSums(vv$Rxz.part)
+    vv$RxzpartRowSums = rowSums(vv$Rxz.part)
     
     if (inherits(x, c("lmerMod", "lmerModLmerTest"))){
       vv$RxpartRowSums = reduceFactors.numeric(fixed=vv$RxpartRowSums, object=vv)
@@ -31,7 +31,7 @@ varianceExplainedToVector <- function(x, X=NULL,Z=NULL){
   if (!is.null(vv$Rz.pairs)) {
     vv$Rz.pairsRowSums <- rowSums(vv$Rz.pairs, na.rm = T)
     
-    vv$Rz.total =  vv$Rz.sum + ifPresent(vv$Rxz) + vv$Rz.pairsRowSums
+    vv$Rz.total =  vv$Rz.sum + ifPresent(vv$Rxz)/2 + vv$Rz.pairsRowSums
     vv$Rz.pairs= matrixToVector(vv$Rz.pairs)
     vv$RzpairsRowSums.combined = sum(vv$Rz.pairsRowSums)
     vv$Rztotal.combined = sum(vv$Rz.total)

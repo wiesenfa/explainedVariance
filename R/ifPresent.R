@@ -1,1 +1,1 @@
-ifPresent <- function(x) ifelse(length(x)>0, x, 0)
+ifPresent <- function(x) if(length(x)>0) return(x) else return(0)

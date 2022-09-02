@@ -18,11 +18,11 @@
 summary.VarExp <-function(object,...){
   if (length(object$Rx)>0){
     fixedTotal <- c(X=object$Rx, 
-                    XZ=sum(object$Rxz),
-                    total=object$Rx+sum(object$Rxz))
+                    XZ=sum(object$Rxz)/2,
+                    total=object$Rx+sum(object$Rxz)/2)
     
     fixedPartial <- rowSums(object$Rx.part)
-    if (length(object$Rxz.part)>0) fixedPartial.XZ <- 2 * rowSums(object$Rxz.part)
+    if (length(object$Rxz.part)>0) fixedPartial.XZ <- rowSums(object$Rxz.part)
     else {
       fixedPartial.XZ=NULL
       fixedTotal <- fixedTotal["total"]
@@ -45,14 +45,14 @@ summary.VarExp <-function(object,...){
     random <- cbind("population"= object$Rz.1,
                     "data-specific deviation"=object$Rz.2, 
                     "data-specific" = object$Rz.1+object$Rz.2,
-                    "X.*"= object$Rxz
+                    "X.*"= object$Rxz/2
     )
     if (length(object$Rz.pairs)>0) {
       random <- cbind(random,
                       "explainedCovariance"=rowSums(object$Rz.pairs, na.rm = TRUE),
                       "sum"= object$Rz.1+object$Rz.2 + 
-                        ifPresent(object$Rxz) + 
-                        rowSums(object$Rz.pairs, na.rm = T)
+                        ifPresent(object$Rxz)/2 + 
+                        rowSums(object$Rz.pairs, na.rm = TRUE)
       )
     }
     if (nrow(random)>1) random <- rbind(random,
@@ -155,11 +155,14 @@ summary.VarExp.boot <-function(object,
                   "data-specific deviation" = object[grepl("Rz.2", rownames(object)),],
                   "data-specific" = object[grepl("Rz.sum", rownames(object)),]
                   )
-  if (nrow(fixed)>0)  random <- cbind(random,
-                                      "X.*" = object[grepl("Rxz.", rownames(object),fixed=T),]
-                                      )
+  if (nrow(fixed)>0)  {
+    random <- cbind(random,
+                    "X.*" = object[grepl("Rxz.", rownames(object),fixed=T),]/2
+                    )
+    colnames(random)[10]="X.*."
+  }
   
-  if (nrow(object[grep("Rz.pairsRowSums", rownames(object)),])>0) {
+  if (nrow(object[grep("Rz.pairsRowSums", rownames(object)),]) > 0) {
     random <- cbind(random,
                     "explainedCovariance" = object[grep("Rz.pairsRowSums", rownames(object)),],
                     "sum"= object[grep("Rz.total", rownames(object)),]
