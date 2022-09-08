@@ -249,8 +249,7 @@ summary.VarExp.boot <-function(object,
 #' @rdname summaries
 summary.VarExpProp.boot <-function(object, 
                                    probs = c(.025,.975),
-                                   separate.cov = FALSE,
-                                   ...)  {
+                                    ...)  {
   if (attr(object, "type") != "population"){
     return(structure(summary.VarExp.boot(object, ...), 
                      class = "summary.VarExpProp"))
