@@ -30,10 +30,11 @@ varianceExplainedToVector <- function(x, X=NULL,Z=NULL){
   vv$Rzsum.combined= sum(vv$Rz.sum)
   if (!is.null(vv$Rz.pairs)) {
     vv$Rz.pairsRowSums <- rowSums(vv$Rz.pairs, na.rm = T)
-    
-    vv$Rz.total =  vv$Rz.sum + ifPresent(vv$Rxz)/2 + vv$Rz.pairsRowSums
+    vv$Rz.withoutCrossterm.total =  vv$Rz.sum + vv$Rz.pairsRowSums
+    vv$Rz.total = vv$Rz.withoutCrossterm.total + ifPresent(vv$Rxz)/2 #vv$Rz.sum  + vv$Rz.pairsRowSums + ifPresent(vv$Rxz)/2
     vv$Rz.pairs= matrixToVector(vv$Rz.pairs)
     vv$RzpairsRowSums.combined = sum(vv$Rz.pairsRowSums)
+    vv$Rztotal.withoutCrossterm.combined = sum(vv$Rz.withoutCrossterm.total)
     vv$Rztotal.combined = sum(vv$Rz.total)
   }
 
