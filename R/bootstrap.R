@@ -36,6 +36,9 @@ varianceExplainedToVector <- function(x, X=NULL,Z=NULL){
     vv$RzpairsRowSums.combined = sum(vv$Rz.pairsRowSums)
     vv$Rztotal.withoutCrossterm.combined = sum(vv$Rz.withoutCrossterm.total)
     vv$Rztotal.combined = sum(vv$Rz.total)
+  } else {
+    vv$Rz.total = vv$Rz.sum + ifPresent(vv$Rxz)/2 
+    vv$Rztotal.combined = sum(vv$Rz.total)
   }
 
   vv$model <- vv$Rx.part <- vv$Rxz.part <- NULL

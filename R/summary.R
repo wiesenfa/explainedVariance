@@ -57,9 +57,10 @@ summary.VarExp <-function(object,...){
       random <- cbind(random,
                       "X.*"= object$Rxz/2,
                       "sum"= object$Rz.1+object$Rz.2 + 
-                        ifPresent(rowSums(object$Rz.pairs, na.rm = TRUE)) + 
+                  #      ifPresent(rowSums(object$Rz.pairs, na.rm = TRUE)) + 
                         ifPresent(object$Rxz)/2 
                       )
+      if (length(object$Rz.pairs)>0) random[,"sum"] = random[,"sum"]+rowSums(object$Rz.pairs, na.rm = TRUE)
       
       if (nrow(random)>1) random <- rbind(random,
                                           total = colSums(random, 
@@ -176,15 +177,13 @@ summary.VarExp.boot <-function(object,
 
     if (nrow(fixed)>0)  {
       random <- cbind(random,
-                      "X.*" = object[grepl("Rxz.", rownames(object),fixed=T),]/2
+                      "X.*" = object[grepl("Rxz.", rownames(object),fixed=T),]/2,
+                      "sum"= object[grep("Rz.total", rownames(object)),]
                       )
       colnames(random)[grep("X.*.", colnames(random))[1]]="X.*."
     }
     
  
-    random <- cbind(random,
-                    "sum"= object[grep("Rz.total", rownames(object)),]
-                    )
     random <- t(random)
     colnames(random) <- gsub("Rz.1.","",colnames(random), fixed=F)
     
@@ -202,12 +201,9 @@ summary.VarExp.boot <-function(object,
       }
       
       if (nrow(fixed)>0)  randomTotal <- cbind(randomTotal,
-                                               "X.*" = object[grep("RxzSum", rownames(object),fixed=T),]  
+                                               "X.*" = object[grep("RxzSum", rownames(object),fixed=T),],
+                                               "sum"= object[grep("Rztotal.combined", rownames(object)),]  
                                                )
-      
-       randomTotal <- cbind(randomTotal,
-                           "sum"= object[grep("Rztotal.combined", rownames(object)),]
-      )
       
       randomTotal <- t(randomTotal)
       colnames(randomTotal) <- "total"
