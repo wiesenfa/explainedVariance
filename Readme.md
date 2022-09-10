@@ -45,7 +45,7 @@ devtools::install_github("wiesenfa/varianceExplainedPack", dependencies = TRUE)
 
 ``` r
 library(lme4)
-library(varianceExplained)
+library(varianceExplainedPack)
 
 fm2 <- lmer(Reaction ~ Days + (Days || Subject), sleepstudy)
 
