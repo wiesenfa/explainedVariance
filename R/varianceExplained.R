@@ -142,7 +142,7 @@ varianceExplained.lmerMod <- varianceExplained.lmerModLmerTest <- function(objec
 #' @rdname varianceExplained
 varianceExplained.mmer <- function(object, X, Z, cholesky=TRUE, ...){   
   # center matrices
-    X <- as.data.frame(scale(X, center = TRUE, scale = FALSE))
+    X <- as.matrix(as.data.frame(scale(X, center = TRUE, scale = FALSE)))
     Z <- lapply(Z, function(x) scale( x, center = TRUE, scale = FALSE))
 
   # get variance components
@@ -177,6 +177,7 @@ varianceExplained.mmer <- function(object, X, Z, cholesky=TRUE, ...){
   deco= structure(c(model = list(object),
                     var.y = var.y, 
                     deco,
+                    X = X, Z = Z,
                     error = var.y - deco$se2 - 
                       deco$Rx - 
                       sum(deco$Rz.1 + deco$Rz.2) -  
