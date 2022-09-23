@@ -64,6 +64,9 @@ summary(proportionOf(varianceExplained(fm2),
                      type = "dataset-specific"))
 summary(proportionOf(bb))
 
+# add simplified output to common model summary including coefficients, standard errors and p-values
+expandResults(summary(proportionOf(bb)))
+
 # Similarly applied to mmer objects from package sommer.
 ```
 

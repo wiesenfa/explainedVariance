@@ -191,7 +191,7 @@ varianceExplained.mmer <- function(object, X, Z, cholesky=TRUE, ...){
 
 #' @importFrom Matrix t
 #' @importFrom stats sigma var vcov coef
-#' @importFrom stats model.frame model.response
+#' @importFrom stats model.frame model.response model.matrix
 #' @export
 #' @rdname varianceExplained
 varianceExplained.lm <- function(object, cholesky=TRUE, ...){
