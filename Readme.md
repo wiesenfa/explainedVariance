@@ -38,14 +38,14 @@ GitHub:
 
 ``` r
 if (!requireNamespace("devtools", quietly = TRUE)) install.packages("devtools")
-devtools::install_github("wiesenfa/varianceExplainedPack", dependencies = TRUE)
+devtools::install_github("wiesenfa/varianceExplained", dependencies = TRUE)
 ```
 
 # Usage
 
 ``` r
 library(lme4)
-library(varianceExplainedPack)
+library(varianceExplained)
 
 fm2 <- lmer(Reaction ~ Days + (Days || Subject), sleepstudy)
 
