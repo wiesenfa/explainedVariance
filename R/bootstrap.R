@@ -87,16 +87,38 @@ vectorToVarExp <- function(x){
 #' Derive bootstrap confidence intervals for variance decomposition (based on percentile method)
 #' 
 #' @param object a \code{lmerMod} or \code{lmerModLmerTest} object created by \code{\link[lme4:lmer]{lme4::lmer()}} or \code{\link[lmerTest:lmer]{lmerTest::lmer()}}, respectively, or a \code{mmer} object created by  \code{\link[sommer:mmer]{sommer::mmer()}}.
-#' @param ... arguments passed to  \code{\link[lme4:bootMer]{lme4::bootMer()}}, in particular \code{nsim} for the number of simulations, the type of bootstrap and arguments for parallel computing
+#' @param ... arguments passed to  \code{\link[lme4:bootMer]{lme4::bootMer()}}, in particular \code{nsim} for the number of simulations, the type of bootstrap and arguments for parallel computing.  In case of mmer() objects arguments  X, Z need to be provided
 #' @param parallel only mmer objects. TRUE for parallelization. Initiallize parallization e.g. with \code{library(doParallel); registerDoParallel(cores = 8)} before 
 #' @param progress only mmer objects. passed to plyr::llply 
 #' @export
 #' @rdname bootVarianceExplained
 bootVarianceExplained <- function(object,...) UseMethod("bootVarianceExplained")
 
+
 #' @export
 #' @rdname bootVarianceExplained
 bootVarianceExplained.default <- function(object, ...) stop("not implemented for this class")
+
+#' Derive bootstrap confidence intervals for variance decomposition (based on percentile method)
+#' 
+#' @param object a \code{VarExp} object from varianceExplained()
+#' @param ... arguments passed to  \code{\link[lme4:bootMer]{lme4::bootMer()}}, in particular \code{nsim} for the number of simulations, the type of bootstrap and arguments for parallel computing.
+#' @param progress only mmer objects. passed to plyr::llply 
+#' @export
+#' @rdname boot
+boot <- function(object,...) UseMethod("boot")
+
+#' @export
+#' @rdname boot
+boot.default <- function(object, ...) stop("not implemented for this class")
+
+
+#' @export
+#' @rdname boot
+boot.VarExp <- function(object, ...){
+  if (!is.null(object$X) & !is.null(object$Z))  bootVarianceExplained(object$model, X = object$X, Z=object$Z, ...) # mmer object
+  else bootVarianceExplained(object$model, ...)
+}
 
 
 #' @importFrom lme4 bootMer

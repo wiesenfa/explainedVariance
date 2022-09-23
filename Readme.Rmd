@@ -73,14 +73,20 @@ library(varianceExplainedPack)
 
 fm2 <- lmer(Reaction ~ Days + (Days || Subject), sleepstudy)
 
-summary(varianceExplained(fm2))
+ve <- varianceExplained(fm2)
+summary(ve)
 
 # including bootstrap confidence intervals
-summary(bootVarianceExplained(fm2, nsim=500))
+bb <- bootVarianceExplained(fm2, nsim=500)
+summary(bb)
+# equivalently 
+bb <- boot(ve, nsim=500)
+summary(bb)
 
 # normalized to the variance of Reaction
 summary(proportionOf(varianceExplained(fm2), 
                      type = "dataset-specific"))
+summary(proportionOf(bb))
 
 # Similarly applied to mmer objects from package sommer.
 ```
