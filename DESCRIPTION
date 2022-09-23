@@ -2,7 +2,7 @@ Package: varianceExplained
 Title: Decomposition of the Explained Variation in the Linear Mixed Model
 Version: 0.5
 Authors@R: 
-     person(given = "Manuel",
+   person(given = "Manuel",
            family = "Wiesenfarth",
            role = c("aut", "cre"),
            email = "m.wiesenfarth@dkfz.de")
