@@ -177,6 +177,7 @@ varianceExplained.mmer <- function(object, X, Z, cholesky=TRUE, ...){
   deco= structure(c(model = list(object),
                     var.y = var.y, 
                     deco,
+                    X = X, Z = Z,
                     error = var.y - deco$se2 - 
                       deco$Rx - 
                       sum(deco$Rz.1 + deco$Rz.2) -  

@@ -1,19 +1,16 @@
-Package: varianceExplainedPack
-Title: What the Package Does (One Line, Title Case)
-Version: 0.4.3
+Package: varianceExplained
+Title: Decomposition of the Explained Variation in the Linear Mixed Model
+Version: 0.5
 Authors@R: 
-    person(given = "Nicholas",
-           family = "Schreck",
-           role = c("aut", "cre"),
-           email = "first.last@example.com",
-           comment = c(ORCID = "YOUR-ORCID-ID"))
     person(given = "Manuel",
            family = "Wiesenfarth",
            role = c("aut", "cre"),
-           email = "first.last@example.com",
-           comment = c(ORCID = "YOUR-ORCID-ID"))
-Description: What the package does (one paragraph).
-License: GPL (>= 3)
+           email = "m.wiesenfarth@dkfz.de")
+    person(given = "Nicholas",
+           family = "Schreck",
+           role = c("aut", "cre"))
+Description: Computes (partial) explained variations in linear mixed models.
+License: GPL (>= 2)
 Imports: lme4, Matrix, reshape2, tidyr, dplyr, sommer, plyr
 Suggests: doParallel
 Encoding: UTF-8
