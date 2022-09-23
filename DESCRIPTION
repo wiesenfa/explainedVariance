@@ -13,7 +13,7 @@ Authors@R:
            email = "first.last@example.com",
            comment = c(ORCID = "YOUR-ORCID-ID"))
 Description: What the package does (one paragraph).
-License: GPL (>= 3)
+License: GPL (>= 2)
 Imports: lme4, Matrix, reshape2, tidyr, dplyr, sommer, plyr
 Suggests: doParallel
 Encoding: UTF-8
