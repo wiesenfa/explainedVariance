@@ -59,7 +59,7 @@ To get the latest released version (master branch) of the R package from GitHub:
   
 ```{r, eval=F}
 if (!requireNamespace("devtools", quietly = TRUE)) install.packages("devtools")
-devtools::install_github("wiesenfa/varianceExplainedPack", dependencies = TRUE)
+devtools::install_github("wiesenfa/varianceExplained", dependencies = TRUE)
 ```
 
 
@@ -69,7 +69,7 @@ devtools::install_github("wiesenfa/varianceExplainedPack", dependencies = TRUE)
 
 ```{r, eval=F}
 library(lme4)
-library(varianceExplainedPack)
+library(varianceExplained)
 
 fm2 <- lmer(Reaction ~ Days + (Days || Subject), sleepstudy)
 
