@@ -1,4 +1,4 @@
-Package: varianceExplained
+Package: explainedVariance
 Title: Decomposition of the Explained Variation in the Linear Mixed Model
 Version: 0.5
 Authors@R: 

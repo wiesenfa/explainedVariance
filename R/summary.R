@@ -75,7 +75,8 @@ summary.VarExp <-function(object,...){
                         random = random,
                         unexplained = unexplained,
                         total = total,
-                        error = error
+                        error = error,
+                        model = object$model
   ), 
   class = "summary.VarExp"))
 }
@@ -117,7 +118,8 @@ summary.VarExpProp <-function(object,...)  {
                           fixedPartial = fixedPartial,
                           random = random,
                           unexplained = unexplained,
-                          total = total), 
+                          total = total,
+                          model = object$model), 
                      class = "summary.VarExpProp"))
   }
 }
@@ -130,7 +132,7 @@ summary.VarExpProp <-function(object,...)  {
 summary.VarExp.boot <-function(object, 
                                probs = c(.025,.975),
                                ...){
-  
+  model <- object$model
   # prepare data
     # uses bootsrap percentile confidence intervals always. could be made more flexible using boot::boot.ci().
     bt=apply(object$t[,!grepl("Rxpart.", colnames(object$t), fixed=T)], 
@@ -238,7 +240,8 @@ summary.VarExp.boot <-function(object,
                    random = random,
                    unexplained = unexplained,
                    total = total,
-                   error = error
+                   error = error,
+                   model = model
     ),
     class = "summary.VarExp")
   )
@@ -255,6 +258,7 @@ summary.VarExpProp.boot <-function(object,
                      class = "summary.VarExpProp"))
     
   } else {
+    model <- object$model
     bt=apply(object$t[,-grep("Rxpart.", colnames(object$t), fixed=T)], 
              2, 
              quantile, 
@@ -289,7 +293,8 @@ summary.VarExpProp.boot <-function(object,
                           fixedPartial = fixedPartial,
                           random = random,
                           unexplained = unexplained,
-                          total = total), 
+                          total = total,
+                          model = model), 
                      class = "summary.VarExpProp"))
   }
 }
