@@ -33,7 +33,7 @@ expandResults.summary.VarExpProp = function(object,
   fixed=merge(as.data.frame(summary(lmeObject)$coefficients),
               as.data.frame(toPercentage(object$fixed[,1:3,drop=F])),
               by="row.names",all=T)%>% 
-    select(-df,-"t value")%>%
+#    select(-"df",-"t value")%>%
     rename(VaExp=` .`) 
   
   random=as.data.frame(object$random[grep("combined.",rownames(object$random),fixed=T),-3,drop=F])%>%
@@ -59,7 +59,7 @@ expandResults.summary.VarExpProp = function(object,
                          as.data.frame(  object$unexplained)%>%
                            rename(VaExp="")%>%
                            mutate(across(everything(), toPercentage))%>%
-                           mutate("Estimate" = lmeObject@sigma^2 / var(getME(lmeObject, "y"))) %>%
+                           mutate("Estimate" = sigma(lmeObject)^2 / var(getME(lmeObject, "y"))) %>%
                            rownames_to_column(var = "Row.names")
   )
   bind_rows(fixed%>% 

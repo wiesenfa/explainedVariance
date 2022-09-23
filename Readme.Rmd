@@ -1,6 +1,5 @@
 ---
-title: "Decomposition of the Explained Variation in 
-the Linear Mixed Model"
+title: "Decomposition of the Explained Variation in the Linear Mixed Model"
 output:
   github_document:
     toc: yes
