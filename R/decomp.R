@@ -42,7 +42,7 @@ decomp <- function(X, Z,
   # Explained variation by fixed effects
     if (ncol(X)>0){
       Rx.part <- var.part(b = b.hat,
-                          Sx = crossprod(X) / (n - 1),
+                          Sx = var(X),
                           Sb = S.b.hat)
       colnames(Rx.part) = rownames(Rx.part) = colnames(X)
       Rx <- sum(Rx.part)
@@ -93,7 +93,7 @@ decomp <- function(X, Z,
                     function(id)  2 *  t(b.hat) %*% t(X) %*% Z[[id]] %*% u.tilde[[id]] / (n - 1)
                     )
       Rxz.part <- sapply(names(su),
-                        function(id) rowSums(var.part_XZ(b=b.hat, u.tilde[[id]], Sxz= ( t(X) %*% Z[[id]] / (n - 1)   ) )) 
+                        function(id) rowSums(var.part_XZ(b=b.hat, u=u.tilde[[id]], Sxz= cov(X, Z[[id]]) )) 
                         )
       if (!is.matrix(Rxz.part)){ # for cases where there is only one fixed effect
         Rxz.part <- t(as.matrix(Rxz.part))
