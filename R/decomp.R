@@ -1,36 +1,3 @@
-var.part <- function(b, Sx, Sb){
-  ##############################################################################
-  # Input: estimates FEs, covariance matrix of covariates, estimated covariance
-  #        matrix of FEs
-  # Output: Matrix including the explained variances due to FEs
-  # Aim: Calculate the
-  ##############################################################################
-  n <- length(b)
-  rxb <- matrix(NA, n, n)
-  Sb = as.matrix(Sb) # assures that correct dimensions if only single covariate
-  Sx = as.matrix(Sx)
-  for(i in 1 : n){
-    for(j in 1 : n){
-      rxb[i, j] <- (b[i] * b[j] - Sb[i, j] ) * Sx[i, j]
-    }
-  }
-  rxb
-}
-
-
-# parital variance including correlations with random effects
-var.part_XZ <- function(b, u, Sxz){
-  k <- length(b)
-  p <- length(u)
-  rxz <- matrix(NA, k, p)
-  for(i in 1 : k){
-    for(j in 1 : p){
-      rxz[i, j] <- ( b[i] * u[j] ) * Sxz[i, j] 
-    }
-  }
-  rxz
-}
-
 
 compute_h1 = function(Xc, Z,
                       su, se2,
