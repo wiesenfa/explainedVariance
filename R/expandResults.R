@@ -64,7 +64,7 @@ expandResults.summary.VarExpProp = function(object,
                             mutate(across(everything(), toPercentage)) %>%
                             rownames_to_column(var = "Row.names"),
                           as.data.frame(object$unexplained) %>%
-                            rename(VaExp="") %>%
+                            rename(VaExp = 1) %>%
                             mutate(across(everything(), toPercentage)) %>%
                             mutate("Estimate" = sigma(lmeObject)^2 / var(getME(lmeObject, "y"))) %>%
                             rownames_to_column(var = "Row.names")
