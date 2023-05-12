@@ -28,44 +28,51 @@ expandResults.default <- function(object, digits, ...) stop("not implemented for
 expandResults.summary.VarExpProp = function(object,
                                             digits=1, ...){
   lmeObject <- object$model
-  toPercentage = function(x) format(round(x*100, digits = digits), nsmall=digits)        
+  toPercentage <- function(x) format(round(x*100, digits = digits), nsmall=digits)        
   
-  fixed=merge(as.data.frame(summary(lmeObject)$coefficients),
-              as.data.frame(toPercentage(object$fixed[,1:3,drop=F])),
-              by="row.names",all=T)%>% 
-#    select(-"df",-"t value")%>%
+  fixed <- merge(as.data.frame(summary(lmeObject)$coefficients),
+                 as.data.frame(toPercentage(object$fixed[,1:3, drop=FALSE])),
+                 by="row.names", all=TRUE)%>% 
+    #    select(-"df",-"t value")%>%
     rename(VaExp=` .`) 
   
-  random=as.data.frame(object$random[grep("combined.",rownames(object$random),fixed=T),-3,drop=F])%>%
+  random <- as.data.frame(object$random[grep("combined.", rownames(object$random), fixed=T),
+                                        -3,
+                                        drop=FALSE]) %>%
     mutate(across(everything(), toPercentage))
-  random= as.data.frame(t(random))%>% 
-    rename(VaExp=`combined.`,
-           "2.5%"=`combined.2.5%`,
-           "97.5%"=`combined.97.5%`) %>%
+  random <- as.data.frame(t(random)) %>% 
+    rename(VaExp = `combined.`,
+           "2.5%" = `combined.2.5%`,
+           "97.5%" = `combined.97.5%`) %>%
     rownames_to_column(var = "Row.names")
   
-  R_X.Z = 2* t(object$random[grep("X.*",rownames(object$random),fixed=T),"total",drop=F] )
-  colnames(R_X.Z)=gsub("X.*.","",colnames(R_X.Z), fixed=T)
-  colnames(R_X.Z)[1]="VaExp"
-  rownames(R_X.Z)= "$S_{XxZ}$"
+  R_X.Z <- 2* t(object$random[grep("X.*", 
+                                   rownames(object$random), 
+                                   fixed=TRUE),
+                              "total",
+                              drop=FALSE] )
+  colnames(R_X.Z) <- gsub("X.*.", "", colnames(R_X.Z), fixed=TRUE)
+  colnames(R_X.Z)[1] <- "VaExp"
+  rownames(R_X.Z) <- "$S_{XxZ}$"
   
-  random.estimates = unlist(lapply(VarCorr(lmeObject), function(x) attr(x, "stddev")^2),       recursive = F) / var(getME(lmeObject, "y"))
-  random2 = bind_cols(random,
-                      Estimate = random.estimates)
-  random.tab = bind_rows(random2,
-                         as.data.frame(  R_X.Z)%>%
-                           mutate(across(everything(), toPercentage))%>%
-                           rownames_to_column(var = "Row.names"),
-                         as.data.frame(  object$unexplained)%>%
-                           rename(VaExp="")%>%
-                           mutate(across(everything(), toPercentage))%>%
-                           mutate("Estimate" = sigma(lmeObject)^2 / var(getME(lmeObject, "y"))) %>%
-                           rownames_to_column(var = "Row.names")
+  random.estimates <- unlist(lapply(VarCorr(lmeObject), 
+                                    function(x) attr(x, "stddev")^2), recursive = F) / var(getME(lmeObject, "y"))
+  random2 <- bind_cols(random,
+                       Estimate = random.estimates)
+  random.tab <- bind_rows(random2,
+                          as.data.frame(R_X.Z) %>%
+                            mutate(across(everything(), toPercentage)) %>%
+                            rownames_to_column(var = "Row.names"),
+                          as.data.frame(object$unexplained) %>%
+                            rename(VaExp="") %>%
+                            mutate(across(everything(), toPercentage)) %>%
+                            mutate("Estimate" = sigma(lmeObject)^2 / var(getME(lmeObject, "y"))) %>%
+                            rownames_to_column(var = "Row.names")
   )
-  bind_rows(fixed%>% 
+  bind_rows(fixed %>% 
               rename(
-                "2.5%"=` .2.5%`,
-                "97.5%"=` .97.5%`),
+                "2.5%" = ` .2.5%`,
+                "97.5%" = ` .97.5%`),
             random.tab
   )
 }
