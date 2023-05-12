@@ -1,6 +1,6 @@
 Package: explainedVariance
 Title: Decomposition of the Explained Variation in the Linear Mixed Model
-Version: 0.60
+Version: 0.6.0
 Authors@R: 
    person(given = "Manuel",
            family = "Wiesenfarth",
