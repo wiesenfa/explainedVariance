@@ -1,36 +1,3 @@
-var.part <- function(b, Sx, Sb){
-  ##############################################################################
-  # Input: estimates FEs, covariance matrix of covariates, estimated covariance
-  #        matrix of FEs
-  # Output: Matrix including the explained variances due to FEs
-  # Aim: Calculate the
-  ##############################################################################
-  n <- length(b)
-  rxb <- matrix(NA, n, n)
-  Sb = as.matrix(Sb) # assures that correct dimensions if only single covariate
-  Sx = as.matrix(Sx)
-  for(i in 1 : n){
-    for(j in 1 : n){
-      rxb[i, j] <- (b[i] * b[j] - Sb[i, j] ) * Sx[i, j]
-    }
-  }
-  rxb
-}
-
-
-# parital variance including correlations with random effects
-var.part_XZ <- function(b, u, Sxz){
-  k <- length(b)
-  p <- length(u)
-  rxz <- matrix(NA, k, p)
-  for(i in 1 : k){
-    for(j in 1 : p){
-      rxz[i, j] <- ( b[i] * u[j] ) * Sxz[i, j] 
-    }
-  }
-  rxz
-}
-
 
 compute_h1 = function(Xc, Z,
                       su, se2,
@@ -75,7 +42,7 @@ decomp <- function(X, Z,
   # Explained variation by fixed effects
     if (ncol(X)>0){
       Rx.part <- var.part(b = b.hat,
-                          Sx = crossprod(X) / (n - 1),
+                          Sx = var(X),
                           Sb = S.b.hat)
       colnames(Rx.part) = rownames(Rx.part) = colnames(X)
       Rx <- sum(Rx.part)
@@ -126,7 +93,7 @@ decomp <- function(X, Z,
                     function(id)  2 *  t(b.hat) %*% t(X) %*% Z[[id]] %*% u.tilde[[id]] / (n - 1)
                     )
       Rxz.part <- sapply(names(su),
-                        function(id) rowSums(var.part_XZ(b=b.hat, u.tilde[[id]], Sxz= ( t(X) %*% Z[[id]] / (n - 1)   ) )) 
+                        function(id) rowSums(var.part_XZ(b=b.hat, u=u.tilde[[id]], Sxz= cov(X, Z[[id]]) )) 
                         )
       if (!is.matrix(Rxz.part)){ # for cases where there is only one fixed effect
         Rxz.part <- t(as.matrix(Rxz.part))
